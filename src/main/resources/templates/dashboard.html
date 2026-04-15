@@ -17,6 +17,7 @@
             padding: 12px 20px;
             margin: 5px 0;
             border-radius: 10px;
+            cursor: pointer;
         }
         .sidebar .nav-link:hover {
             background: rgba(255,255,255,0.2);
@@ -37,9 +38,6 @@
         .card-stats:hover {
             transform: translateY(-5px);
         }
-        .factura-modal {
-            max-width: 800px;
-        }
         @media print {
             .no-print {
                 display: none;
@@ -58,22 +56,22 @@
                 <small class="text-white-50" th:text="${session.usuario.nombreCompleto}"></small>
             </div>
             <nav class="nav flex-column px-3">
-                <a class="nav-link" href="#" onclick="cargarPagina('dashboard')">
+                <a class="nav-link" onclick="cargarPagina('dashboard')">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
-                <a class="nav-link" href="#" onclick="cargarPagina('clientes')">
+                <a class="nav-link" onclick="cargarPagina('clientes')">
                     <i class="fas fa-users"></i> Clientes
                 </a>
-                <a class="nav-link" href="#" onclick="cargarPagina('productos')">
+                <a class="nav-link" onclick="cargarPagina('productos')">
                     <i class="fas fa-box"></i> Productos
                 </a>
-                <a class="nav-link" href="#" onclick="cargarPagina('ventas')">
+                <a class="nav-link" onclick="cargarPagina('ventas')">
                     <i class="fas fa-shopping-cart"></i> Ventas
                 </a>
-                <a class="nav-link" href="#" onclick="cargarPagina('nuevaVenta')">
+                <a class="nav-link" onclick="cargarPagina('nuevaVenta')">
                     <i class="fas fa-plus-circle"></i> Nueva Venta
                 </a>
-                <a class="nav-link" href="#" onclick="cargarPagina('usuarios')">
+                <a class="nav-link" onclick="cargarPagina('usuarios')">
                     <i class="fas fa-users-cog"></i> Usuarios
                 </a>
                 <hr class="bg-light">
@@ -105,6 +103,142 @@
     </div>
 </div>
 
+<!-- Modal Cliente -->
+<div class="modal fade" id="modalCliente" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalClienteTitulo">Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCliente">
+                    <input type="hidden" id="clienteDpi" name="dpiCliente">
+                    <div class="mb-3">
+                        <label>DPI</label>
+                        <input type="text" class="form-control" id="clienteDpiInput" name="dpiCliente" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="clienteNombre" name="nombreCliente" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Apellido</label>
+                        <input type="text" class="form-control" id="clienteApellido" name="apellidoCliente" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Dirección</label>
+                        <input type="text" class="form-control" id="clienteDireccion" name="direccion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Estado</label>
+                        <select class="form-control" id="clienteEstado" name="estado">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Producto -->
+<div class="modal fade" id="modalProducto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalProductoTitulo">Producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formProducto">
+                    <input type="hidden" id="productoCodigo" name="codigoProducto">
+                    <div class="mb-3">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="productoNombre" name="nombreProducto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Precio</label>
+                        <input type="number" step="0.01" class="form-control" id="productoPrecio" name="precio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Stock</label>
+                        <input type="number" class="form-control" id="productoStock" name="stock" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Estado</label>
+                        <select class="form-control" id="productoEstado" name="estado">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="guardarProducto()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Usuario -->
+<div class="modal fade" id="modalUsuario" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="modalUsuarioTitulo">Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formUsuario">
+                    <input type="hidden" id="usuarioCodigo" name="codigoUsuario">
+                    <div class="mb-3">
+                        <label>Nombre Completo</label>
+                        <input type="text" class="form-control" id="usuarioNombreCompleto" name="nombreCompleto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Username</label>
+                        <input type="text" class="form-control" id="usuarioUsername" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="usuarioEmail" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" id="usuarioPassword" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Rol</label>
+                        <select class="form-control" id="usuarioRol" name="rol">
+                            <option value="ADMIN">Administrador</option>
+                            <option value="VENDEDOR">Vendedor</option>
+                            <option value="INVENTARIO">Inventario</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Estado</label>
+                        <select class="form-control" id="usuarioEstado" name="estado">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="guardarUsuario()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Factura -->
 <div class="modal fade" id="modalFactura" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -114,7 +248,6 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="facturaBody">
-                <!-- Contenido de factura -->
             </div>
             <div class="modal-footer no-print">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -130,10 +263,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     let carrito = [];
     let totalVenta = 0;
+    let tablaActual = null;
 
     $(document).ready(function() {
         cargarPagina('dashboard');
@@ -155,12 +290,16 @@
         }
     }
 
+    // ==================== DASHBOARD ====================
     function cargarDashboard() {
         $('#tituloPagina').text('Dashboard');
         $.get('/clientes', function(clientes) {
             $.get('/productos', function(productos) {
                 $.get('/ventas', function(ventas) {
                     $.get('/usuarios', function(usuarios) {
+                        let ventasRecientes = ventas.slice(-5).reverse();
+                        let totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
+
                         let html = `
                             <div class="row">
                                 <div class="col-md-3 mb-4">
@@ -205,17 +344,19 @@
                                         <div class="card-body">
                                             <table class="table table-sm">
                                                 <thead>
-                                                    <tr><th>Código</th><th>Fecha</th><th>Total</th><th>Estado</th></tr>
+                                                    <tr><th>Código</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr>
                                                 </thead>
                                                 <tbody>
-                                                    ${ventas.slice(0,5).map(v => `
+                                                    ${ventasRecientes.map(v => `
                                                         <tr>
                                                             <td>${v.codigoVenta}</td>
                                                             <td>${new Date(v.fechaVenta).toLocaleDateString()}</td>
+                                                            <td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td>
                                                             <td>Q${v.total.toFixed(2)}</td>
-                                                            <td>${v.estado == 1 ? 'Activa' : 'Cancelada'}</td>
+                                                            <td>${v.estado == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Cancelada</span>'}</td>
                                                         </tr>
                                                     `).join('')}
+                                                    ${ventasRecientes.length === 0 ? '<tr><td colspan="5" class="text-center">No hay ventas registradas</td></tr>' : ''}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -224,10 +365,14 @@
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header bg-dark text-white">
-                                            <h6><i class="fas fa-chart-bar"></i> Resumen</h6>
+                                            <h6><i class="fas fa-chart-bar"></i> Resumen Financiero</h6>
                                         </div>
                                         <div class="card-body">
                                             <canvas id="ventasChart"></canvas>
+                                            <hr>
+                                            <div class="text-center">
+                                                <h4>Total Ventas: Q${totalVentas.toFixed(2)}</h4>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -235,7 +380,6 @@
                         `;
                         $('#contenidoPrincipal').html(html);
 
-                        // Gráfico simple
                         const ctx = document.getElementById('ventasChart').getContext('2d');
                         new Chart(ctx, {
                             type: 'bar',
@@ -254,6 +398,7 @@
         });
     }
 
+    // ==================== CLIENTES ====================
     function cargarClientes() {
         $('#tituloPagina').text('Clientes');
         $.get('/clientes', function(data) {
@@ -286,10 +431,81 @@
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
+            if ($.fn.DataTable.isDataTable('#tablaClientes')) {
+                $('#tablaClientes').DataTable().destroy();
+            }
             $('#tablaClientes').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
         });
     }
 
+    function mostrarFormularioCliente() {
+        $('#modalClienteTitulo').text('Nuevo Cliente');
+        $('#formCliente')[0].reset();
+        $('#clienteDpi').val('');
+        $('#clienteDpiInput').prop('readonly', false);
+        $('#modalCliente').modal('show');
+    }
+
+    function editarCliente(dpi) {
+        $.get('/clientes/' + dpi, function(cliente) {
+            $('#modalClienteTitulo').text('Editar Cliente');
+            $('#clienteDpi').val(cliente.dpiCliente);
+            $('#clienteDpiInput').val(cliente.dpiCliente);
+            $('#clienteDpiInput').prop('readonly', true);
+            $('#clienteNombre').val(cliente.nombreCliente);
+            $('#clienteApellido').val(cliente.apellidoCliente);
+            $('#clienteDireccion').val(cliente.direccion);
+            $('#clienteEstado').val(cliente.estado);
+            $('#modalCliente').modal('show');
+        });
+    }
+
+    function guardarCliente() {
+        let cliente = {
+            dpiCliente: $('#clienteDpiInput').val(),
+            nombreCliente: $('#clienteNombre').val(),
+            apellidoCliente: $('#clienteApellido').val(),
+            direccion: $('#clienteDireccion').val(),
+            estado: parseInt($('#clienteEstado').val())
+        };
+
+        let dpiExistente = $('#clienteDpi').val();
+        let url = dpiExistente ? '/clientes/' + dpiExistente : '/clientes';
+        let method = dpiExistente ? 'PUT' : 'POST';
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify(cliente),
+            success: function() {
+                $('#modalCliente').modal('hide');
+                cargarClientes();
+                mostrarAlerta('Cliente guardado exitosamente', 'success');
+            },
+            error: function(xhr) {
+                mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger');
+            }
+        });
+    }
+
+    function eliminarCliente(dpi) {
+        if (confirm('¿Estás seguro de eliminar este cliente?')) {
+            $.ajax({
+                url: '/clientes/' + dpi,
+                method: 'DELETE',
+                success: function() {
+                    cargarClientes();
+                    mostrarAlerta('Cliente eliminado', 'success');
+                },
+                error: function() {
+                    mostrarAlerta('Error al eliminar', 'danger');
+                }
+            });
+        }
+    }
+
+    // ==================== PRODUCTOS ====================
     function cargarProductos() {
         $('#tituloPagina').text('Productos');
         $.get('/productos', function(data) {
@@ -322,10 +538,77 @@
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
+            if ($.fn.DataTable.isDataTable('#tablaProductos')) {
+                $('#tablaProductos').DataTable().destroy();
+            }
             $('#tablaProductos').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
         });
     }
 
+    function mostrarFormularioProducto() {
+        $('#modalProductoTitulo').text('Nuevo Producto');
+        $('#formProducto')[0].reset();
+        $('#productoCodigo').val('');
+        $('#modalProducto').modal('show');
+    }
+
+    function editarProducto(codigo) {
+        $.get('/productos/' + codigo, function(producto) {
+            $('#modalProductoTitulo').text('Editar Producto');
+            $('#productoCodigo').val(producto.codigoProducto);
+            $('#productoNombre').val(producto.nombreProducto);
+            $('#productoPrecio').val(producto.precio);
+            $('#productoStock').val(producto.stock);
+            $('#productoEstado').val(producto.estado);
+            $('#modalProducto').modal('show');
+        });
+    }
+
+    function guardarProducto() {
+        let producto = {
+            nombreProducto: $('#productoNombre').val(),
+            precio: parseFloat($('#productoPrecio').val()),
+            stock: parseInt($('#productoStock').val()),
+            estado: parseInt($('#productoEstado').val())
+        };
+
+        let codigoExistente = $('#productoCodigo').val();
+        let url = codigoExistente ? '/productos/' + codigoExistente : '/productos';
+        let method = codigoExistente ? 'PUT' : 'POST';
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify(producto),
+            success: function() {
+                $('#modalProducto').modal('hide');
+                cargarProductos();
+                mostrarAlerta('Producto guardado exitosamente', 'success');
+            },
+            error: function(xhr) {
+                mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger');
+            }
+        });
+    }
+
+    function eliminarProducto(codigo) {
+        if (confirm('¿Estás seguro de eliminar este producto?')) {
+            $.ajax({
+                url: '/productos/' + codigo,
+                method: 'DELETE',
+                success: function() {
+                    cargarProductos();
+                    mostrarAlerta('Producto eliminado', 'success');
+                },
+                error: function() {
+                    mostrarAlerta('Error al eliminar', 'danger');
+                }
+            });
+        }
+    }
+
+    // ==================== VENTAS ====================
     function cargarVentas() {
         $('#tituloPagina').text('Ventas');
         $.get('/ventas', function(data) {
@@ -352,90 +635,98 @@
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
+            if ($.fn.DataTable.isDataTable('#tablaVentas')) {
+                $('#tablaVentas').DataTable().destroy();
+            }
             $('#tablaVentas').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
         });
     }
 
+    // ==================== NUEVA VENTA ====================
     function cargarNuevaVenta() {
         carrito = [];
         totalVenta = 0;
         $('#tituloPagina').text('Nueva Venta');
 
-        $.get('/clientes', function(clientes) {
-            $.get('/productos', function(productos) {
-                let html = `
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="card">
-                                <div class="card-header bg-primary text-white">
-                                    <h5>Datos de la Venta</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label>Cliente</label>
-                                        <select class="form-control" id="clienteSelect">
-                                            <option value="">Seleccione cliente...</option>
-                                            ${clientes.map(c => `<option value="${c.dpiCliente}" data-nombre="${c.nombreCliente} ${c.apellidoCliente}">${c.nombreCliente} ${c.apellidoCliente} - ${c.dpiCliente}</option>`).join('')}
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Fecha</label>
-                                        <input type="date" class="form-control" id="fechaVenta" value="${new Date().toISOString().split('T')[0]}">
-                                    </div>
-                                </div>
+        Promise.all([
+            $.get('/clientes'),
+            $.get('/productos')
+        ]).then(function(responses) {
+            let clientes = responses[0];
+            let productos = responses[1];
+
+            let html = `
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5>Datos de la Venta</h5>
                             </div>
-                            <div class="card mt-3">
-                                <div class="card-header bg-success text-white">
-                                    <h5>Agregar Producto</h5>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label>Cliente</label>
+                                    <select class="form-control" id="clienteSelect">
+                                        <option value="">Seleccione cliente...</option>
+                                        ${clientes.map(c => `<option value="${c.dpiCliente}" data-nombre="${c.nombreCliente} ${c.apellidoCliente}">${c.nombreCliente} ${c.apellidoCliente} - ${c.dpiCliente}</option>`).join('')}
+                                    </select>
                                 </div>
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label>Producto</label>
-                                        <select class="form-control" id="productoSelect">
-                                            <option value="">Seleccione producto...</option>
-                                            ${productos.map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-stock="${p.stock}" data-nombre="${p.nombreProducto}">${p.nombreProducto} - Q${p.precio} (Stock: ${p.stock})</option>`).join('')}
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Cantidad</label>
-                                        <input type="number" class="form-control" id="cantidadProducto" value="1" min="1">
-                                    </div>
-                                    <button class="btn btn-primary w-100" onclick="agregarAlCarrito()">
-                                        <i class="fas fa-cart-plus"></i> Agregar
-                                    </button>
+                                <div class="mb-3">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" id="fechaVenta" value="${new Date().toISOString().split('T')[0]}">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-7">
-                            <div class="card">
-                                <div class="card-header bg-info text-white">
-                                    <h5>Carrito de Compras</h5>
+                        <div class="card mt-3">
+                            <div class="card-header bg-success text-white">
+                                <h5>Agregar Producto</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label>Producto</label>
+                                    <select class="form-control" id="productoSelect">
+                                        <option value="">Seleccione producto...</option>
+                                        ${productos.filter(p => p.estado == 1 && p.stock > 0).map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-stock="${p.stock}" data-nombre="${p.nombreProducto}">${p.nombreProducto} - Q${p.precio} (Stock: ${p.stock})</option>`).join('')}
+                                    </select>
                                 </div>
-                                <div class="card-body">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr>
-                                        </thead>
-                                        <tbody id="carritoBody">
-                                            <tr><td colspan="5" class="text-center">No hay productos</td></tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="table-secondary">
-                                                <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
-                                                <td colspan="2"><strong id="totalCarrito">Q0.00</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                    <button class="btn btn-success w-100" onclick="finalizarVenta()">
-                                        <i class="fas fa-check-circle"></i> Finalizar Venta
-                                    </button>
+                                <div class="mb-3">
+                                    <label>Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidadProducto" value="1" min="1">
                                 </div>
+                                <button class="btn btn-primary w-100" onclick="agregarAlCarrito()">
+                                    <i class="fas fa-cart-plus"></i> Agregar
+                                </button>
                             </div>
                         </div>
                     </div>
-                `;
-                $('#contenidoPrincipal').html(html);
-            });
+                    <div class="col-md-7">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5>Carrito de Compras</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr>
+                                    </thead>
+                                    <tbody id="carritoBody">
+                                        <tr><td colspan="5" class="text-center">No hay productos</td></tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-secondary">
+                                            <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
+                                            <td colspan="2"><strong id="totalCarrito">Q0.00</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <button class="btn btn-success w-100" onclick="finalizarVenta()">
+                                    <i class="fas fa-check-circle"></i> Finalizar Venta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#contenidoPrincipal').html(html);
         });
     }
 
@@ -447,7 +738,7 @@
         const cantidad = parseInt(document.getElementById('cantidadProducto').value);
 
         if (!productoId) {
-            alert('Seleccione un producto');
+            mostrarAlerta('Seleccione un producto', 'warning');
             return;
         }
 
@@ -466,6 +757,7 @@
         }
 
         actualizarCarrito();
+        mostrarAlerta('Producto agregado', 'success');
     }
 
     function actualizarCarrito() {
@@ -500,6 +792,7 @@
     function eliminarDelCarrito(index) {
         carrito.splice(index, 1);
         actualizarCarrito();
+        mostrarAlerta('Producto eliminado del carrito', 'info');
     }
 
     function finalizarVenta() {
@@ -507,16 +800,15 @@
         const fecha = document.getElementById('fechaVenta').value;
 
         if (!clienteId) {
-            alert('Seleccione un cliente');
+            mostrarAlerta('Seleccione un cliente', 'warning');
             return;
         }
 
         if (carrito.length === 0) {
-            alert('Agregue productos a la venta');
+            mostrarAlerta('Agregue productos a la venta', 'warning');
             return;
         }
 
-        // Primero crear la venta
         const ventaData = {
             fechaVenta: fecha,
             total: totalVenta,
@@ -525,95 +817,48 @@
             usuario: { codigoUsuario: [[${session.usuario.codigoUsuario}]] }
         };
 
-        $.post('/ventas', JSON.stringify(ventaData), function(venta) {
-            // Luego crear los detalles
-            let detallesCompletados = 0;
-            carrito.forEach(producto => {
-                const detalleData = {
-                    cantidad: producto.cantidad,
-                    precioUnitario: producto.precio,
-                    subtotal: producto.subtotal,
-                    productos: { codigoProducto: producto.id },
-                    ventas: { codigoVenta: venta.codigoVenta }
-                };
+        $.ajax({
+            url: '/ventas',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(ventaData),
+            success: function(venta) {
+                let detallesCompletados = 0;
+                carrito.forEach(producto => {
+                    const detalleData = {
+                        cantidad: producto.cantidad,
+                        precioUnitario: producto.precio,
+                        subtotal: producto.subtotal,
+                        producto: { codigoProducto: parseInt(producto.id) },
+                        venta: { codigoVenta: venta.codigoVenta }
+                    };
 
-                $.post('/detalleVentas', JSON.stringify(detalleData), function() {
-                    detallesCompletados++;
-                    if (detallesCompletados === carrito.length) {
-                        alert('Venta registrada exitosamente');
-                        verFactura(venta.codigoVenta);
-                        cargarPagina('ventas');
-                    }
-                }).fail(function() {
-                    alert('Error al registrar detalles');
+                    $.ajax({
+                        url: '/detalleVentas',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(detalleData),
+                        success: function() {
+                            detallesCompletados++;
+                            if (detallesCompletados === carrito.length) {
+                                mostrarAlerta('Venta registrada exitosamente', 'success');
+                                verFactura(venta.codigoVenta);
+                                cargarPagina('ventas');
+                            }
+                        },
+                        error: function() {
+                            mostrarAlerta('Error al registrar detalles', 'danger');
+                        }
+                    });
                 });
-            });
-        }).fail(function() {
-            alert('Error al registrar la venta');
+            },
+            error: function() {
+                mostrarAlerta('Error al registrar la venta', 'danger');
+            }
         });
     }
 
-    function verFactura(codigoVenta) {
-        $.get('/ventas/' + codigoVenta, function(venta) {
-            $.get('/detalleVentas', function(detalles) {
-                const detallesVenta = detalles.filter(d => d.ventas?.codigoVenta == codigoVenta);
-
-                let facturaHtml = `
-                    <div class="factura" style="font-family: monospace;">
-                        <div class="text-center mb-4">
-                            <h2>KINALAPP</h2>
-                            <p>Sistema de Ventas</p>
-                            <p>NIT: 123456-7</p>
-                            <hr>
-                            <h4>FACTURA No. ${venta.codigoVenta}</h4>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <strong>Fecha:</strong> ${new Date(venta.fechaVenta).toLocaleDateString()}<br>
-                                <strong>Cliente:</strong> ${venta.cliente?.nombreCliente} ${venta.cliente?.apellidoCliente}<br>
-                                <strong>DPI:</strong> ${venta.cliente?.dpiCliente}
-                            </div>
-                            <div class="col-6">
-                                <strong>Vendedor:</strong> ${venta.usuario?.nombreCompleto}<br>
-                                <strong>Usuario:</strong> ${venta.usuario?.username}
-                            </div>
-                        </div>
-                        <hr>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr><th>Cantidad</th><th>Producto</th><th>Precio</th><th>Subtotal</th></tr>
-                            </thead>
-                            <tbody>
-                                ${detallesVenta.map(d => `
-                                    <tr>
-                                        <td>${d.cantidad}</td>
-                                        <td>${d.productos?.nombreProducto}</td>
-                                        <td>Q${d.precioUnitario.toFixed(2)}</td>
-                                        <td>Q${d.subtotal.toFixed(2)}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                            <tfoot>
-                                <tr class="table-secondary">
-                                    <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
-                                    <td><strong>Q${venta.total.toFixed(2)}</strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <hr>
-                        <div class="text-center mt-4">
-                            <p>¡Gracias por su compra!</p>
-                            <small>Este documento es una factura oficial</small>
-                        </div>
-                    </div>
-                `;
-
-                $('#facturaBody').html(facturaHtml);
-                $('#modalFactura').modal('show');
-            });
-        });
-    }
-
+    // ==================== USUARIOS ====================
     function cargarUsuarios() {
         $('#tituloPagina').text('Usuarios');
         $.get('/usuarios', function(data) {
@@ -647,24 +892,156 @@
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
+            if ($.fn.DataTable.isDataTable('#tablaUsuarios')) {
+                $('#tablaUsuarios').DataTable().destroy();
+            }
             $('#tablaUsuarios').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
         });
     }
 
-    // Funciones CRUD (similares a las anteriores)
-    function mostrarFormularioCliente() { /* Implementar modal */ }
-    function editarCliente(dpi) { /* Implementar */ }
-    function eliminarCliente(dpi) { if(confirm('¿Eliminar?')) $.ajax({url:'/clientes/'+dpi,method:'DELETE',success:()=>cargarClientes()}); }
+    function mostrarFormularioUsuario() {
+        $('#modalUsuarioTitulo').text('Nuevo Usuario');
+        $('#formUsuario')[0].reset();
+        $('#usuarioCodigo').val('');
+        $('#modalUsuario').modal('show');
+    }
 
-    function mostrarFormularioProducto() { /* Implementar modal */ }
-    function editarProducto(codigo) { /* Implementar */ }
-    function eliminarProducto(codigo) { if(confirm('¿Eliminar?')) $.ajax({url:'/productos/'+codigo,method:'DELETE',success:()=>cargarProductos()}); }
+    function editarUsuario(codigo) {
+        $.get('/usuarios/' + codigo, function(usuario) {
+            $('#modalUsuarioTitulo').text('Editar Usuario');
+            $('#usuarioCodigo').val(usuario.codigoUsuario);
+            $('#usuarioNombreCompleto').val(usuario.nombreCompleto);
+            $('#usuarioUsername').val(usuario.username);
+            $('#usuarioEmail').val(usuario.email);
+            $('#usuarioRol').val(usuario.rol);
+            $('#usuarioEstado').val(usuario.estado);
+            $('#usuarioPassword').val(usuario.password);
+            $('#modalUsuario').modal('show');
+        });
+    }
 
-    function mostrarFormularioUsuario() { /* Implementar modal */ }
-    function editarUsuario(codigo) { /* Implementar */ }
-    function eliminarUsuario(codigo) { if(confirm('¿Eliminar?')) $.ajax({url:'/usuarios/'+codigo,method:'DELETE',success:()=>cargarUsuarios()}); }
+    function guardarUsuario() {
+        let usuario = {
+            nombreCompleto: $('#usuarioNombreCompleto').val(),
+            username: $('#usuarioUsername').val(),
+            email: $('#usuarioEmail').val(),
+            password: $('#usuarioPassword').val(),
+            rol: $('#usuarioRol').val(),
+            estado: parseInt($('#usuarioEstado').val())
+        };
+
+        let codigoExistente = $('#usuarioCodigo').val();
+        let url = codigoExistente ? '/usuarios/' + codigoExistente : '/usuarios';
+        let method = codigoExistente ? 'PUT' : 'POST';
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify(usuario),
+            success: function() {
+                $('#modalUsuario').modal('hide');
+                cargarUsuarios();
+                mostrarAlerta('Usuario guardado exitosamente', 'success');
+            },
+            error: function(xhr) {
+                mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger');
+            }
+        });
+    }
+
+    function eliminarUsuario(codigo) {
+        if (confirm('¿Estás seguro de eliminar este usuario?')) {
+            $.ajax({
+                url: '/usuarios/' + codigo,
+                method: 'DELETE',
+                success: function() {
+                    cargarUsuarios();
+                    mostrarAlerta('Usuario eliminado', 'success');
+                },
+                error: function() {
+                    mostrarAlerta('Error al eliminar', 'danger');
+                }
+            });
+        }
+    }
+
+    // ==================== FACTURA ====================
+    function verFactura(codigoVenta) {
+        Promise.all([
+            $.get('/ventas/' + codigoVenta),
+            $.get('/detalleVentas')
+        ]).then(function(responses) {
+            let venta = responses[0];
+            let todosDetalles = responses[1];
+            let detallesVenta = todosDetalles.filter(d => d.venta?.codigoVenta == codigoVenta);
+
+            let facturaHtml = `
+                <div class="factura" style="font-family: monospace;" id="facturaParaImprimir">
+                    <div class="text-center mb-4">
+                        <h2>KINALAPP</h2>
+                        <p>Sistema de Ventas</p>
+                        <p>NIT: 123456-7</p>
+                        <hr>
+                        <h4>FACTURA No. ${venta.codigoVenta}</h4>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>Fecha:</strong> ${new Date(venta.fechaVenta).toLocaleDateString()}<br>
+                            <strong>Cliente:</strong> ${venta.cliente?.nombreCliente} ${venta.cliente?.apellidoCliente}<br>
+                            <strong>DPI:</strong> ${venta.cliente?.dpiCliente}
+                        </div>
+                        <div class="col-6">
+                            <strong>Vendedor:</strong> ${venta.usuario?.nombreCompleto}<br>
+                            <strong>Usuario:</strong> ${venta.usuario?.username}
+                        </div>
+                    </div>
+                    <hr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr><th>Cantidad</th><th>Producto</th><th>Precio</th><th>Subtotal</th></tr>
+                        </thead>
+                        <tbody>
+                            ${detallesVenta.map(d => `
+                                <tr>
+                                    <td>${d.cantidad}</td>
+                                    <td>${d.producto?.nombreProducto}</td>
+                                    <td>Q${d.precioUnitario.toFixed(2)}</td>
+                                    <td>Q${d.subtotal.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-secondary">
+                                <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
+                                <td><strong>Q${venta.total.toFixed(2)}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <hr>
+                    <div class="text-center mt-4">
+                        <p>¡Gracias por su compra!</p>
+                        <small>Este documento es una factura oficial</small>
+                    </div>
+                </div>
+            `;
+
+            $('#facturaBody').html(facturaHtml);
+            $('#modalFactura').modal('show');
+        });
+    }
+
+    // ==================== ALERTAS ====================
+    function mostrarAlerta(mensaje, tipo) {
+        let alerta = $(`
+            <div class="alert alert-${tipo} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 9999; min-width: 300px;">
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `);
+        $('body').append(alerta);
+        setTimeout(() => alerta.alert('close'), 3000);
+    }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
