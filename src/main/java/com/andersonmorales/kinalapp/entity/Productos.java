@@ -1,27 +1,33 @@
 package com.andersonmorales.kinalapp.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Productos")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Productos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_producto")
-    private long codigoProducto;
+    private Long codigoProducto;  // Cambiado de long a Long
+
     @Column(name = "nombre_producto", nullable = false)
     private String nombreProducto;
+
     @Column(name = "precio", nullable = false)
     private double precio;
+
     @Column(name = "stock", nullable = false)
     private long stock;
+
     @Column(name = "estado", nullable = false)
     private int estado;
 
-    public Productos(){}
+    public Productos() {}
 
-    public Productos(long codigoProducto, String nombreProducto, double precio, long stock, int estado){
+    public Productos(Long codigoProducto, String nombreProducto, double precio, long stock, int estado) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.precio = precio;
@@ -29,11 +35,11 @@ public class Productos {
         this.estado = estado;
     }
 
-    public long getCodigoProducto() {
+    public Long getCodigoProducto() {
         return codigoProducto;
     }
 
-    public void setCodigoProducto(long codigoProducto) {
+    public void setCodigoProducto(Long codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
 

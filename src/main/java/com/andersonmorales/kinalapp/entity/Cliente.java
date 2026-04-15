@@ -4,28 +4,32 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "clientes")
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cliente {
+
     @Id
     @Column(name = "dpi_cliente")
     private String dpiCliente;
+
     @Column(name = "nombreCliente", nullable = false)
     private String nombreCliente;
+
     @Column(name = "apellidoCliente", nullable = false)
     private String apellidoCliente;
+
     @Column(name = "direccion", nullable = false)
     private String direccion;
+
     @Column(name = "estado", nullable = false)
-    private int estado;
+    private Integer estado;  // Cambiado de int a Integer
 
-    public Cliente() {
-    }
+    public Cliente() {}
 
-
-    public Cliente(String dpiCliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
+    public Cliente(String dpiCliente, String nombreCliente, String apellidoCliente, String direccion, Integer estado) {
         this.dpiCliente = dpiCliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
@@ -65,11 +69,11 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public int getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 }
