@@ -8,97 +8,162 @@
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* ========== ESTILOS COMPLETOS ========== */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
+        * { font-family: 'Playfair Display', 'New York', 'Times New Roman', serif; }
+        body { background: #0a0c10; color: #e0e0e0; }
+
         .sidebar {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(145deg, #0f1217 0%, #0b0d12 100%);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+            border-right: 1px solid rgba(255,215,0,0.15);
         }
         .sidebar .nav-link {
-            color: rgba(255,255,255,0.8);
+            color: #c0c4ce;
             padding: 12px 20px;
             margin: 5px 0;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
         .sidebar .nav-link:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
+            background: linear-gradient(90deg, rgba(255,215,0,0.15) 0%, rgba(255,215,0,0.05) 100%);
+            color: #ffd966;
+            transform: translateX(5px);
         }
         .sidebar .nav-link.active {
-            background: rgba(255,255,255,0.3);
-            color: white;
+            background: linear-gradient(90deg, rgba(255,215,0,0.25) 0%, rgba(255,215,0,0.1) 100%);
+            color: #ffd700;
+            border-left: 3px solid #ffd700;
         }
+        .sidebar .nav-link i { margin-right: 10px; width: 24px; }
+
         .navbar-top {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #111316;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,215,0,0.2);
         }
+        .navbar-top h5 { color: #ffd966; font-weight: 600; }
+        .navbar-top .fa-user-circle { color: #ffd700; }
+
         .card-stats {
-            transition: transform 0.3s;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             cursor: pointer;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
-        .card-stats:hover {
-            transform: translateY(-5px);
+        .card-stats:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(255,215,0,0.2); }
+        .card {
+            background: #121418;
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 20px;
+            color: #e0e0e0;
         }
+        .card-header {
+            background: #1a1d24 !important;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+            font-weight: 600;
+            border-radius: 20px 20px 0 0 !important;
+            color: #ffd966 !important;
+        }
+
+        .btn-primary, .btn-success, .btn-warning, .btn-info, .btn-danger {
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: none;
+        }
+        .btn-primary { background: linear-gradient(135deg, #2c3e66 0%, #1a2638 100%); color: #ffd966; }
+        .btn-primary:hover { background: linear-gradient(135deg, #3e5a8f 0%, #2a3a55 100%); color: #ffea8c; transform: scale(1.02); box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+        .btn-success { background: linear-gradient(135deg, #1e4a2f 0%, #0e2a1a 100%); color: #ffd966; }
+        .btn-success:hover { background: linear-gradient(135deg, #2a6e42 0%, #1a4028 100%); color: #ffea8c; transform: scale(1.02); box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+        .btn-warning { background: linear-gradient(135deg, #b8860b 0%, #8b6508 100%); color: #fff2cc; }
+        .btn-warning:hover { background: linear-gradient(135deg, #daa520 0%, #b8860b 100%); color: #ffffff; transform: scale(1.02); box-shadow: 0 0 12px rgba(255,215,0,0.6); }
+        .btn-danger { background: linear-gradient(135deg, #6b1a1a 0%, #4a0f0f 100%); color: #ffb3b3; }
+        .btn-danger:hover { background: linear-gradient(135deg, #8b2222 0%, #5e1414 100%); color: #ffd966; transform: scale(1.02); }
+        .btn-info { background: linear-gradient(135deg, #1a4d5e 0%, #0e2e38 100%); color: #b3e4ff; }
+        .btn-info:hover { background: linear-gradient(135deg, #237a94 0%, #144a59 100%); color: #ffd966; transform: scale(1.02); box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+
+        .table { color: #ffffff !important; background-color: #121418; border-radius: 16px; overflow: hidden; }
+        .table-dark, .table thead th { background-color: #1a1d24 !important; color: #ffd966 !important; border-bottom: 2px solid rgba(255,215,0,0.3); }
+        .table-striped > tbody > tr:nth-of-type(odd) > * { background-color: rgba(255,215,0,0.05); color: #ffffff !important; }
+        .table tbody tr:hover { background-color: rgba(255,215,0,0.1); }
+        .table td, .table th { color: #ffffff !important; vertical-align: middle; }
+
+        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_paginate { color: #ffffff !important; }
+        .dataTables_wrapper .dataTables_filter input { background: #0c0f14; border: 1px solid #2a2e3a; color: white; border-radius: 12px; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button { background: #1a1d24; color: #ffd966 !important; border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #ffd966 !important; color: #0a0c10 !important; }
+        .dataTables_length select { background: #0c0f14; color: white; border: 1px solid #2a2e3a; border-radius: 8px; }
+
+        .modal-content { background: #15181f; border: 1px solid rgba(255,215,0,0.3); border-radius: 24px; color: #e0e0e0; }
+        .modal-header { background: linear-gradient(135deg, #2c3e66, #1a2638); border-bottom: 1px solid rgba(255,215,0,0.2); border-radius: 24px 24px 0 0; color: #ffd966; }
+        .form-control, .form-select { background-color: #0c0f14; border: 1px solid #2a2e3a; color: #ffffff !important; border-radius: 12px; }
+        .form-control:focus, .form-select:focus { border-color: #ffd966; box-shadow: 0 0 0 0.25rem rgba(255,217,102,0.25); }
+        label { color: #ffd966; font-weight: 500; margin-bottom: 6px; }
+
+        .badge.bg-success { background: #1e4a2f !important; color: #ffea9e; }
+        .badge.bg-danger { background: #6b1a1a !important; color: #ffc9c9; }
+        .badge.bg-info { background: #1a4d5e !important; color: #c5efff; }
+
+        .factura { background: #121418; color: #e0e0e0; padding: 20px; border-radius: 16px; }
+        .factura h2, .factura h4 { color: #ffd966; }
+        .display-4 { color: #ffd966; font-weight: 700; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0c10; }
+        ::-webkit-scrollbar-thumb { background: #ffd966; border-radius: 10px; }
+
+        .alert { background: #1e2129; border: 1px solid rgba(255,215,0,0.4); color: #ffea9e; border-radius: 16px; }
+
         @media print {
-            .no-print {
-                display: none;
-            }
+            .no-print { display: none; }
+            .sidebar, .navbar-top, .btn, .modal-footer { display: none; }
+            .factura { background: white; color: black; }
+            .factura h2, .factura h4 { color: #b8860b; }
         }
     </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         <div class="col-md-2 p-0 sidebar">
             <div class="text-center py-4">
-                <i class="fas fa-store fa-3x text-white"></i>
+                <i class="fas fa-store fa-3x" style="color: #ffd966;"></i>
                 <h4 class="text-white mt-2">KinalApp</h4>
                 <small class="text-white-50" th:text="${session.usuario.nombreCompleto}"></small>
             </div>
             <nav class="nav flex-column px-3">
-                <a class="nav-link" onclick="cargarPagina('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a class="nav-link" onclick="cargarPagina('clientes')">
-                    <i class="fas fa-users"></i> Clientes
-                </a>
-                <a class="nav-link" onclick="cargarPagina('productos')">
-                    <i class="fas fa-box"></i> Productos
-                </a>
-                <a class="nav-link" onclick="cargarPagina('ventas')">
-                    <i class="fas fa-shopping-cart"></i> Ventas
-                </a>
-                <a class="nav-link" onclick="cargarPagina('nuevaVenta')">
-                    <i class="fas fa-plus-circle"></i> Nueva Venta
-                </a>
-                <a class="nav-link" onclick="cargarPagina('usuarios')">
-                    <i class="fas fa-users-cog"></i> Usuarios
-                </a>
+                <a class="nav-link" onclick="cargarPagina('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link" onclick="cargarPagina('clientes')"><i class="fas fa-users"></i> Clientes</a>
+                <a class="nav-link" onclick="cargarPagina('productos')"><i class="fas fa-box"></i> Productos</a>
+                <a class="nav-link" onclick="cargarPagina('ventas')"><i class="fas fa-shopping-cart"></i> Ventas</a>
+                <a class="nav-link" onclick="cargarPagina('nuevaVenta')"><i class="fas fa-plus-circle"></i> Nueva Venta</a>
+                <a class="nav-link" onclick="cargarPagina('usuarios')"><i class="fas fa-users-cog"></i> Usuarios</a>
                 <hr class="bg-light">
-                <a class="nav-link" href="/logout">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </a>
+                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
             </nav>
         </div>
 
-        <!-- Main Content -->
         <div class="col-md-10 p-0">
             <nav class="navbar navbar-top px-4 py-2">
+                <div><h5 class="mb-0" id="tituloPagina">Dashboard</h5></div>
                 <div>
-                    <h5 class="mb-0" id="tituloPagina">Dashboard</h5>
-                </div>
-                <div>
-                        <span class="me-3">
-                            <i class="fas fa-user-circle"></i>
-                            <span th:text="${session.usuario.username}"></span>
-                            <span class="badge bg-info ms-2" th:text="${session.usuario.rol}"></span>
-                        </span>
+                    <span class="me-3">
+                        <i class="fas fa-user-circle"></i>
+                        <span th:text="${session.usuario.username}"></span>
+                        <span class="badge bg-info ms-2" th:text="${session.usuario.rol}"></span>
+                    </span>
+                    <input type="hidden" id="usuarioActualId" th:value="${session.usuario.codigoUsuario}">
                 </div>
             </nav>
-
-            <div class="p-4" id="contenidoPrincipal">
-                <!-- Contenido dinámico -->
-            </div>
+            <div class="p-4" id="contenidoPrincipal"></div>
         </div>
     </div>
 </div>
@@ -107,36 +172,18 @@
 <div class="modal fade" id="modalCliente" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalClienteTitulo">Cliente</h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalClienteTitulo"><i class="fas fa-user-plus"></i> Cliente</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="formCliente">
-                    <input type="hidden" id="clienteDpi" name="dpiCliente">
-                    <div class="mb-3">
-                        <label>DPI</label>
-                        <input type="text" class="form-control" id="clienteDpiInput" name="dpiCliente" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" id="clienteNombre" name="nombreCliente" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Apellido</label>
-                        <input type="text" class="form-control" id="clienteApellido" name="apellidoCliente" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Dirección</label>
-                        <input type="text" class="form-control" id="clienteDireccion" name="direccion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control" id="clienteEstado" name="estado">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="clienteDpiHidden">
+                    <div class="mb-3"><label>DPI</label><input type="text" class="form-control" id="clienteDpi" required></div>
+                    <div class="mb-3"><label>Nombre</label><input type="text" class="form-control" id="clienteNombre" required></div>
+                    <div class="mb-3"><label>Apellido</label><input type="text" class="form-control" id="clienteApellido" required></div>
+                    <div class="mb-3"><label>Dirección</label><input type="text" class="form-control" id="clienteDireccion" required></div>
+                    <div class="mb-3"><label>Estado</label><select class="form-control" id="clienteEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -151,32 +198,17 @@
 <div class="modal fade" id="modalProducto" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="modalProductoTitulo">Producto</h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalProductoTitulo"><i class="fas fa-box-open"></i> Producto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="formProducto">
-                    <input type="hidden" id="productoCodigo" name="codigoProducto">
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" id="productoNombre" name="nombreProducto" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Precio</label>
-                        <input type="number" step="0.01" class="form-control" id="productoPrecio" name="precio" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Stock</label>
-                        <input type="number" class="form-control" id="productoStock" name="stock" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control" id="productoEstado" name="estado">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="productoCodigoHidden">
+                    <div class="mb-3"><label>Nombre</label><input type="text" class="form-control" id="productoNombre" required></div>
+                    <div class="mb-3"><label>Precio</label><input type="number" step="0.01" class="form-control" id="productoPrecio" required></div>
+                    <div class="mb-3"><label>Stock</label><input type="number" class="form-control" id="productoStock" required></div>
+                    <div class="mb-3"><label>Estado</label><select class="form-control" id="productoEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -191,44 +223,19 @@
 <div class="modal fade" id="modalUsuario" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="modalUsuarioTitulo">Usuario</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalUsuarioTitulo"><i class="fas fa-user-shield"></i> Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="formUsuario">
-                    <input type="hidden" id="usuarioCodigo" name="codigoUsuario">
-                    <div class="mb-3">
-                        <label>Nombre Completo</label>
-                        <input type="text" class="form-control" id="usuarioNombreCompleto" name="nombreCompleto" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Username</label>
-                        <input type="text" class="form-control" id="usuarioUsername" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" class="form-control" id="usuarioEmail" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Contraseña</label>
-                        <input type="password" class="form-control" id="usuarioPassword" name="password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Rol</label>
-                        <select class="form-control" id="usuarioRol" name="rol">
-                            <option value="ADMIN">Administrador</option>
-                            <option value="VENDEDOR">Vendedor</option>
-                            <option value="INVENTARIO">Inventario</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control" id="usuarioEstado" name="estado">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="usuarioCodigoHidden">
+                    <div class="mb-3"><label>Nombre Completo</label><input type="text" class="form-control" id="usuarioNombreCompleto" required></div>
+                    <div class="mb-3"><label>Username</label><input type="text" class="form-control" id="usuarioUsername" required></div>
+                    <div class="mb-3"><label>Email</label><input type="email" class="form-control" id="usuarioEmail" required></div>
+                    <div class="mb-3"><label>Contraseña</label><input type="password" class="form-control" id="usuarioPassword"><small class="text-muted">Dejar en blanco para mantener la actual</small></div>
+                    <div class="mb-3"><label>Rol</label><select class="form-control" id="usuarioRol"><option value="ADMIN">Administrador</option><option value="VENDEDOR">Vendedor</option><option value="INVENTARIO">Inventario</option></select></div>
+                    <div class="mb-3"><label>Estado</label><select class="form-control" id="usuarioEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -243,17 +250,14 @@
 <div class="modal fade" id="modalFactura" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <h5 class="modal-title"><i class="fas fa-file-invoice"></i> Factura de Venta</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="facturaBody">
-            </div>
+            <div class="modal-body" id="facturaBody"></div>
             <div class="modal-footer no-print">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()">
-                    <i class="fas fa-print"></i> Imprimir
-                </button>
+                <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
             </div>
         </div>
     </div>
@@ -268,26 +272,27 @@
 <script>
     let carrito = [];
     let totalVenta = 0;
-    let tablaActual = null;
 
     $(document).ready(function() {
         cargarPagina('dashboard');
     });
 
     function cargarPagina(pagina) {
-        if (pagina === 'dashboard') {
-            cargarDashboard();
-        } else if (pagina === 'clientes') {
-            cargarClientes();
-        } else if (pagina === 'productos') {
-            cargarProductos();
-        } else if (pagina === 'ventas') {
-            cargarVentas();
-        } else if (pagina === 'nuevaVenta') {
-            cargarNuevaVenta();
-        } else if (pagina === 'usuarios') {
-            cargarUsuarios();
-        }
+        if (pagina === 'dashboard') cargarDashboard();
+        else if (pagina === 'clientes') cargarClientes();
+        else if (pagina === 'productos') cargarProductos();
+        else if (pagina === 'ventas') cargarVentas();
+        else if (pagina === 'nuevaVenta') cargarNuevaVenta();
+        else if (pagina === 'usuarios') cargarUsuarios();
+
+        $('.sidebar .nav-link').removeClass('active');
+        $(`.sidebar .nav-link[onclick="cargarPagina('${pagina}')"]`).addClass('active');
+    }
+
+    function mostrarAlerta(mensaje, tipo) {
+        let alerta = $(`<div class="alert alert-${tipo} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 9999; min-width: 300px;">${mensaje}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`);
+        $('body').append(alerta);
+        setTimeout(() => alerta.alert('close'), 3000);
     }
 
     // ==================== DASHBOARD ====================
@@ -299,97 +304,24 @@
                     $.get('/usuarios', function(usuarios) {
                         let ventasRecientes = ventas.slice(-5).reverse();
                         let totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
-
                         let html = `
                             <div class="row">
-                                <div class="col-md-3 mb-4">
-                                    <div class="card text-white bg-primary card-stats" onclick="cargarPagina('clientes')">
-                                        <div class="card-body">
-                                            <h5><i class="fas fa-users"></i> Clientes</h5>
-                                            <h2 class="display-4">${clientes.length}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <div class="card text-white bg-success card-stats" onclick="cargarPagina('productos')">
-                                        <div class="card-body">
-                                            <h5><i class="fas fa-box"></i> Productos</h5>
-                                            <h2 class="display-4">${productos.length}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <div class="card text-white bg-info card-stats" onclick="cargarPagina('ventas')">
-                                        <div class="card-body">
-                                            <h5><i class="fas fa-shopping-cart"></i> Ventas</h5>
-                                            <h2 class="display-4">${ventas.length}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <div class="card text-white bg-warning card-stats" onclick="cargarPagina('usuarios')">
-                                        <div class="card-body">
-                                            <h5><i class="fas fa-users-cog"></i> Usuarios</h5>
-                                            <h2 class="display-4">${usuarios.length}</h2>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="col-md-3 mb-4"><div class="card text-white card-stats" onclick="cargarPagina('clientes')" style="background: linear-gradient(145deg, #1e2a47, #12182a);"><div class="card-body"><h5><i class="fas fa-users"></i> Clientes</h5><h2 class="display-4">${clientes.length}</h2></div></div></div>
+                                <div class="col-md-3 mb-4"><div class="card text-white card-stats" onclick="cargarPagina('productos')" style="background: linear-gradient(145deg, #1a472a, #0e2a1a);"><div class="card-body"><h5><i class="fas fa-box"></i> Productos</h5><h2 class="display-4">${productos.length}</h2></div></div></div>
+                                <div class="col-md-3 mb-4"><div class="card text-white card-stats" onclick="cargarPagina('ventas')" style="background: linear-gradient(145deg, #1a4f62, #0f3542);"><div class="card-body"><h5><i class="fas fa-shopping-cart"></i> Ventas</h5><h2 class="display-4">${ventas.length}</h2></div></div></div>
+                                <div class="col-md-3 mb-4"><div class="card text-white card-stats" onclick="cargarPagina('usuarios')" style="background: linear-gradient(145deg, #8b691b, #5e450d);"><div class="card-body"><h5><i class="fas fa-users-cog"></i> Usuarios</h5><h2 class="display-4">${usuarios.length}</h2></div></div></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header bg-dark text-white">
-                                            <h6><i class="fas fa-chart-line"></i> Ventas Recientes</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <table class="table table-sm">
-                                                <thead>
-                                                    <tr><th>Código</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr>
-                                                </thead>
-                                                <tbody>
-                                                    ${ventasRecientes.map(v => `
-                                                        <tr>
-                                                            <td>${v.codigoVenta}</td>
-                                                            <td>${new Date(v.fechaVenta).toLocaleDateString()}</td>
-                                                            <td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td>
-                                                            <td>Q${v.total.toFixed(2)}</td>
-                                                            <td>${v.estado == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Cancelada</span>'}</td>
-                                                        </tr>
-                                                    `).join('')}
-                                                    ${ventasRecientes.length === 0 ? '<tr><td colspan="5" class="text-center">No hay ventas registradas</td></tr>' : ''}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header bg-dark text-white">
-                                            <h6><i class="fas fa-chart-bar"></i> Resumen Financiero</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <canvas id="ventasChart"></canvas>
-                                            <hr>
-                                            <div class="text-center">
-                                                <h4>Total Ventas: Q${totalVentas.toFixed(2)}</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="col-md-6"><div class="card"><div class="card-header"><h6><i class="fas fa-chart-line"></i> Ventas Recientes</h6></div><div class="card-body"><table class="table table-sm"><thead><tr><th>Código</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr></thead><tbody>${ventasRecientes.map(v => `<tr><td>${v.codigoVenta}</td><td>${new Date(v.fechaVenta).toLocaleDateString()}</td><td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td><td>Q${v.total.toFixed(2)}</td><td>${v.estado == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Cancelada</span>'}</td></tr>`).join('')}</tbody>}</table></div></div></div>
+                                <div class="col-md-6"><div class="card"><div class="card-header"><h6><i class="fas fa-chart-bar"></i> Resumen Financiero</h6></div><div class="card-body"><canvas id="ventasChart"></canvas><hr><div class="text-center"><h4 style="color:#ffd966;">Total Ventas: Q${totalVentas.toFixed(2)}</h4></div></div></div></div>
                             </div>
                         `;
                         $('#contenidoPrincipal').html(html);
-
-                        const ctx = document.getElementById('ventasChart').getContext('2d');
-                        new Chart(ctx, {
+                        new Chart(document.getElementById('ventasChart'), {
                             type: 'bar',
                             data: {
                                 labels: ['Clientes', 'Productos', 'Ventas', 'Usuarios'],
-                                datasets: [{
-                                    label: 'Totales',
-                                    data: [clientes.length, productos.length, ventas.length, usuarios.length],
-                                    backgroundColor: ['#007bff', '#28a745', '#17a2b8', '#ffc107']
-                                }]
+                                datasets: [{ label: 'Totales', data: [clientes.length, productos.length, ventas.length, usuarios.length], backgroundColor: ['#ffd966', '#ffb347', '#ff8c42', '#ffb347'] }]
                             }
                         });
                     });
@@ -405,71 +337,50 @@
             let html = `
                 <div class="d-flex justify-content-between mb-3">
                     <h3>Lista de Clientes</h3>
-                    <button class="btn btn-primary" onclick="mostrarFormularioCliente()">
-                        <i class="fas fa-plus"></i> Nuevo Cliente
-                    </button>
+                    <button class="btn btn-primary" onclick="mostrarFormularioCliente()"><i class="fas fa-plus"></i> Nuevo Cliente</button>
                 </div>
                 <table class="table table-striped" id="tablaClientes">
-                    <thead class="table-dark">
-                        <tr><th>DPI</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th>Estado</th><th>Acciones</th></tr>
-                    </thead>
-                    <tbody>
-                        ${data.map(c => `
-                            <tr>
-                                <td>${c.dpiCliente}</td>
-                                <td>${c.nombreCliente}</td>
-                                <td>${c.apellidoCliente}</td>
-                                <td>${c.direccion}</td>
-                                <td>${c.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editarCliente('${c.dpiCliente}')"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-danger" onclick="eliminarCliente('${c.dpiCliente}')"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
+                    <thead class="table-dark"><tr><th>DPI</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>${data.map(c => `<tr><td>${c.dpiCliente}</td><td>${c.nombreCliente}</td><td>${c.apellidoCliente}</td><td>${c.direccion}</td><td>${c.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td><td><button class="btn btn-sm btn-warning" onclick="editarCliente('${c.dpiCliente}')"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="eliminarCliente('${c.dpiCliente}')"><i class="fas fa-trash"></i></button></td></tr>`).join('')}</tbody>
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
-            if ($.fn.DataTable.isDataTable('#tablaClientes')) {
-                $('#tablaClientes').DataTable().destroy();
-            }
-            $('#tablaClientes').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
+            if ($.fn.DataTable.isDataTable('#tablaClientes')) $('#tablaClientes').DataTable().destroy();
+            $('#tablaClientes').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } });
         });
     }
 
     function mostrarFormularioCliente() {
         $('#modalClienteTitulo').text('Nuevo Cliente');
         $('#formCliente')[0].reset();
-        $('#clienteDpi').val('');
-        $('#clienteDpiInput').prop('readonly', false);
+        $('#clienteDpiHidden').val('');
+        $('#clienteDpi').prop('readonly', false);
         $('#modalCliente').modal('show');
     }
 
     function editarCliente(dpi) {
-        $.get('/clientes/' + dpi, function(cliente) {
+        $.get('/clientes/' + dpi, function(c) {
             $('#modalClienteTitulo').text('Editar Cliente');
-            $('#clienteDpi').val(cliente.dpiCliente);
-            $('#clienteDpiInput').val(cliente.dpiCliente);
-            $('#clienteDpiInput').prop('readonly', true);
-            $('#clienteNombre').val(cliente.nombreCliente);
-            $('#clienteApellido').val(cliente.apellidoCliente);
-            $('#clienteDireccion').val(cliente.direccion);
-            $('#clienteEstado').val(cliente.estado);
+            $('#clienteDpiHidden').val(c.dpiCliente);
+            $('#clienteDpi').val(c.dpiCliente).prop('readonly', true);
+            $('#clienteNombre').val(c.nombreCliente);
+            $('#clienteApellido').val(c.apellidoCliente);
+            $('#clienteDireccion').val(c.direccion);
+            $('#clienteEstado').val(c.estado);
             $('#modalCliente').modal('show');
         });
     }
 
     function guardarCliente() {
-        let cliente = {
-            dpiCliente: $('#clienteDpiInput').val(),
+        let clienteData = {
+            dpiCliente: $('#clienteDpi').val(),
             nombreCliente: $('#clienteNombre').val(),
             apellidoCliente: $('#clienteApellido').val(),
             direccion: $('#clienteDireccion').val(),
             estado: parseInt($('#clienteEstado').val())
         };
 
-        let dpiExistente = $('#clienteDpi').val();
+        let dpiExistente = $('#clienteDpiHidden').val();
         let url = dpiExistente ? '/clientes/' + dpiExistente : '/clientes';
         let method = dpiExistente ? 'PUT' : 'POST';
 
@@ -477,7 +388,7 @@
             url: url,
             method: method,
             contentType: 'application/json',
-            data: JSON.stringify(cliente),
+            data: JSON.stringify(clienteData),
             success: function() {
                 $('#modalCliente').modal('hide');
                 cargarClientes();
@@ -491,41 +402,27 @@
 
     function eliminarCliente(dpi) {
         if (confirm('¿Estás seguro de eliminar este cliente?')) {
-            $.ajax({
-                url: '/clientes/' + dpi,
-                method: 'DELETE',
-                success: function() {
-                    cargarClientes();
-                    mostrarAlerta('Cliente eliminado', 'success');
-                },
-                error: function() {
-                    mostrarAlerta('Error al eliminar', 'danger');
-                }
-            });
+            $.ajax({ url: '/clientes/' + dpi, method: 'DELETE', success: function() { cargarClientes(); mostrarAlerta('Cliente eliminado', 'success'); } });
         }
     }
 
-    // ==================== PRODUCTOS ====================
+    // ==================== PRODUCTOS CORREGIDO ====================
     function cargarProductos() {
         $('#tituloPagina').text('Productos');
         $.get('/productos', function(data) {
             let html = `
                 <div class="d-flex justify-content-between mb-3">
                     <h3>Lista de Productos</h3>
-                    <button class="btn btn-primary" onclick="mostrarFormularioProducto()">
-                        <i class="fas fa-plus"></i> Nuevo Producto
-                    </button>
+                    <button class="btn btn-primary" onclick="mostrarFormularioProducto()"><i class="fas fa-plus"></i> Nuevo Producto</button>
                 </div>
                 <table class="table table-striped" id="tablaProductos">
-                    <thead class="table-dark">
-                        <tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr>
-                    </thead>
+                    <thead class="table-dark"><tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead>
                     <tbody>
                         ${data.map(p => `
                             <tr>
                                 <td>${p.codigoProducto}</td>
                                 <td>${p.nombreProducto}</td>
-                                <td>Q${p.precio.toFixed(2)}</td>
+                                <td>Q${parseFloat(p.precio).toFixed(2)}</td>
                                 <td>${p.stock}</td>
                                 <td>${p.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td>
                                 <td>
@@ -538,41 +435,44 @@
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
-            if ($.fn.DataTable.isDataTable('#tablaProductos')) {
-                $('#tablaProductos').DataTable().destroy();
-            }
-            $('#tablaProductos').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
+            if ($.fn.DataTable.isDataTable('#tablaProductos')) $('#tablaProductos').DataTable().destroy();
+            $('#tablaProductos').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } });
+        }).fail(function(error) {
+            mostrarAlerta('Error al cargar los productos', 'danger');
         });
     }
 
     function mostrarFormularioProducto() {
         $('#modalProductoTitulo').text('Nuevo Producto');
         $('#formProducto')[0].reset();
-        $('#productoCodigo').val('');
+        $('#productoCodigoHidden').val('');
         $('#modalProducto').modal('show');
     }
 
     function editarProducto(codigo) {
-        $.get('/productos/' + codigo, function(producto) {
+        $.get('/productos/' + codigo, function(p) {
             $('#modalProductoTitulo').text('Editar Producto');
-            $('#productoCodigo').val(producto.codigoProducto);
-            $('#productoNombre').val(producto.nombreProducto);
-            $('#productoPrecio').val(producto.precio);
-            $('#productoStock').val(producto.stock);
-            $('#productoEstado').val(producto.estado);
+            $('#productoCodigoHidden').val(p.codigoProducto);
+            $('#productoNombre').val(p.nombreProducto);
+            $('#productoPrecio').val(p.precio);
+            $('#productoStock').val(p.stock);
+            $('#productoEstado').val(p.estado);
             $('#modalProducto').modal('show');
+        }).fail(function(error) {
+            mostrarAlerta('Error al cargar los datos del producto', 'danger');
         });
     }
 
     function guardarProducto() {
-        let producto = {
+        // IMPORTANTE: NO incluir codigoProducto en el objeto
+        let productoData = {
             nombreProducto: $('#productoNombre').val(),
             precio: parseFloat($('#productoPrecio').val()),
             stock: parseInt($('#productoStock').val()),
             estado: parseInt($('#productoEstado').val())
         };
 
-        let codigoExistente = $('#productoCodigo').val();
+        let codigoExistente = $('#productoCodigoHidden').val();
         let url = codigoExistente ? '/productos/' + codigoExistente : '/productos';
         let method = codigoExistente ? 'PUT' : 'POST';
 
@@ -580,14 +480,15 @@
             url: url,
             method: method,
             contentType: 'application/json',
-            data: JSON.stringify(producto),
-            success: function() {
+            data: JSON.stringify(productoData),
+            success: function(response) {
                 $('#modalProducto').modal('hide');
                 cargarProductos();
                 mostrarAlerta('Producto guardado exitosamente', 'success');
             },
             error: function(xhr) {
-                mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger');
+                let mensaje = xhr.responseText || 'Error al guardar el producto';
+                mostrarAlerta(mensaje, 'danger');
             }
         });
     }
@@ -599,10 +500,10 @@
                 method: 'DELETE',
                 success: function() {
                     cargarProductos();
-                    mostrarAlerta('Producto eliminado', 'success');
+                    mostrarAlerta('Producto eliminado exitosamente', 'success');
                 },
-                error: function() {
-                    mostrarAlerta('Error al eliminar', 'danger');
+                error: function(xhr) {
+                    mostrarAlerta(xhr.responseText || 'Error al eliminar el producto', 'danger');
                 }
             });
         }
@@ -615,30 +516,13 @@
             let html = `
                 <h3>Historial de Ventas</h3>
                 <table class="table table-striped" id="tablaVentas">
-                    <thead class="table-dark">
-                        <tr><th>Código</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
-                    </thead>
-                    <tbody>
-                        ${data.map(v => `
-                            <tr>
-                                <td>${v.codigoVenta}</td>
-                                <td>${new Date(v.fechaVenta).toLocaleDateString()}</td>
-                                <td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td>
-                                <td>Q${v.total.toFixed(2)}</td>
-                                <td>${v.estado == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Cancelada</span>'}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-info" onclick="verFactura(${v.codigoVenta})"><i class="fas fa-file-invoice"></i> Factura</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
+                    <thead class="table-dark"><tr><th>Código</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>${data.map(v => `<tr><td>${v.codigoVenta}</td><td>${new Date(v.fechaVenta).toLocaleDateString()}</td><td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td><td>Q${v.total.toFixed(2)}</td><td>${v.estado == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Cancelada</span>'}</td><td><button class="btn btn-sm btn-info" onclick="verFactura(${v.codigoVenta})"><i class="fas fa-file-invoice"></i> Factura</button></td></tr>`).join('')}</tbody>
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
-            if ($.fn.DataTable.isDataTable('#tablaVentas')) {
-                $('#tablaVentas').DataTable().destroy();
-            }
-            $('#tablaVentas').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
+            if ($.fn.DataTable.isDataTable('#tablaVentas')) $('#tablaVentas').DataTable().destroy();
+            $('#tablaVentas').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } });
         });
     }
 
@@ -647,80 +531,37 @@
         carrito = [];
         totalVenta = 0;
         $('#tituloPagina').text('Nueva Venta');
-
-        Promise.all([
-            $.get('/clientes'),
-            $.get('/productos')
-        ]).then(function(responses) {
-            let clientes = responses[0];
-            let productos = responses[1];
-
+        Promise.all([$.get('/clientes'), $.get('/productos')]).then(function(respuestas) {
+            let clientes = respuestas[0], productos = respuestas[1];
             let html = `
                 <div class="row">
                     <div class="col-md-5">
                         <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5>Datos de la Venta</h5>
-                            </div>
+                            <div class="card-header"><h5>Datos de la Venta</h5></div>
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <label>Cliente</label>
-                                    <select class="form-control" id="clienteSelect">
-                                        <option value="">Seleccione cliente...</option>
-                                        ${clientes.map(c => `<option value="${c.dpiCliente}" data-nombre="${c.nombreCliente} ${c.apellidoCliente}">${c.nombreCliente} ${c.apellidoCliente} - ${c.dpiCliente}</option>`).join('')}
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Fecha</label>
-                                    <input type="date" class="form-control" id="fechaVenta" value="${new Date().toISOString().split('T')[0]}">
-                                </div>
+                                <div class="mb-3"><label>Cliente</label><select class="form-control" id="clienteSelect"><option value="">Seleccione cliente...</option>${clientes.map(c => `<option value="${c.dpiCliente}">${c.nombreCliente} ${c.apellidoCliente} - ${c.dpiCliente}</option>`).join('')}</select></div>
+                                <div class="mb-3"><label>Fecha</label><input type="date" class="form-control" id="fechaVenta" value="${new Date().toISOString().split('T')[0]}"></div>
                             </div>
                         </div>
                         <div class="card mt-3">
-                            <div class="card-header bg-success text-white">
-                                <h5>Agregar Producto</h5>
-                            </div>
+                            <div class="card-header"><h5>Agregar Producto</h5></div>
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <label>Producto</label>
-                                    <select class="form-control" id="productoSelect">
-                                        <option value="">Seleccione producto...</option>
-                                        ${productos.filter(p => p.estado == 1 && p.stock > 0).map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-stock="${p.stock}" data-nombre="${p.nombreProducto}">${p.nombreProducto} - Q${p.precio} (Stock: ${p.stock})</option>`).join('')}
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Cantidad</label>
-                                    <input type="number" class="form-control" id="cantidadProducto" value="1" min="1">
-                                </div>
-                                <button class="btn btn-primary w-100" onclick="agregarAlCarrito()">
-                                    <i class="fas fa-cart-plus"></i> Agregar
-                                </button>
+                                <div class="mb-3"><label>Producto</label><select class="form-control" id="productoSelect"><option value="">Seleccione producto...</option>${productos.filter(p => p.estado == 1 && p.stock > 0).map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-nombre="${p.nombreProducto}" data-stock="${p.stock}">${p.nombreProducto} - Q${p.precio} (Stock: ${p.stock})</option>`).join('')}</select></div>
+                                <div class="mb-3"><label>Cantidad</label><input type="number" class="form-control" id="cantidadProducto" value="1" min="1"></div>
+                                <button class="btn btn-primary w-100" onclick="agregarAlCarrito()"><i class="fas fa-cart-plus"></i> Agregar</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-7">
                         <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h5>Carrito de Compras</h5>
-                            </div>
+                            <div class="card-header"><h5>Carrito de Compras</h5></div>
                             <div class="card-body">
                                 <table class="table table-sm">
-                                    <thead>
-                                        <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr>
-                                    </thead>
-                                    <tbody id="carritoBody">
-                                        <tr><td colspan="5" class="text-center">No hay productos</td></tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-secondary">
-                                            <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
-                                            <td colspan="2"><strong id="totalCarrito">Q0.00</strong></td>
-                                        </tr>
-                                    </tfoot>
+                                    <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr></thead>
+                                    <tbody id="carritoBody"><tr><td colspan="5" class="text-center">No hay productos</td></tr></tbody>
+                                    <tfoot><tr class="table-secondary"><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td colspan="2"><strong id="totalCarrito">Q0.00</strong></td></tr></tfoot>
                                 </table>
-                                <button class="btn btn-success w-100" onclick="finalizarVenta()">
-                                    <i class="fas fa-check-circle"></i> Finalizar Venta
-                                </button>
+                                <button class="btn btn-success w-100" onclick="finalizarVenta()"><i class="fas fa-check-circle"></i> Finalizar Venta</button>
                             </div>
                         </div>
                     </div>
@@ -731,61 +572,82 @@
     }
 
     function agregarAlCarrito() {
-        const select = document.getElementById('productoSelect');
-        const productoId = select.value;
-        const productoNombre = select.options[select.selectedIndex]?.getAttribute('data-nombre');
-        const productoPrecio = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-precio'));
-        const cantidad = parseInt(document.getElementById('cantidadProducto').value);
+        let select = document.getElementById('productoSelect');
+        let productoId = select.value;
+        let productoNombre = select.options[select.selectedIndex]?.getAttribute('data-nombre');
+        let productoPrecio = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-precio'));
+        let stockDisponible = parseInt(select.options[select.selectedIndex]?.getAttribute('data-stock'));
+        let cantidad = parseInt(document.getElementById('cantidadProducto').value);
 
-        if (!productoId) {
-            mostrarAlerta('Seleccione un producto', 'warning');
+        if (!productoId) { mostrarAlerta('Seleccione un producto', 'warning'); return; }
+
+        if (cantidad <= 0) {
+            mostrarAlerta('La cantidad debe ser mayor a 0', 'warning');
             return;
         }
 
-        const existe = carrito.find(p => p.id == productoId);
-        if (existe) {
-            existe.cantidad += cantidad;
-            existe.subtotal = existe.cantidad * existe.precio;
+        let itemEnCarrito = carrito.find(p => p.id == productoId);
+        let cantidadActualEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+        let nuevaCantidadTotal = cantidadActualEnCarrito + cantidad;
+
+        if (nuevaCantidadTotal > stockDisponible) {
+            mostrarAlerta(`Stock insuficiente. Solo hay ${stockDisponible} unidades disponibles`, 'danger');
+            return;
+        }
+
+        if (itemEnCarrito) {
+            itemEnCarrito.cantidad += cantidad;
+            itemEnCarrito.subtotal = itemEnCarrito.cantidad * itemEnCarrito.precio;
         } else {
             carrito.push({
                 id: productoId,
                 nombre: productoNombre,
                 precio: productoPrecio,
                 cantidad: cantidad,
-                subtotal: cantidad * productoPrecio
+                subtotal: cantidad * productoPrecio,
+                stockMaximo: stockDisponible
             });
         }
-
         actualizarCarrito();
         mostrarAlerta('Producto agregado', 'success');
     }
 
     function actualizarCarrito() {
-        const tbody = document.getElementById('carritoBody');
+        let tbody = document.getElementById('carritoBody');
         totalVenta = carrito.reduce((sum, p) => sum + p.subtotal, 0);
-
         if (carrito.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos</td></tr>';
             document.getElementById('totalCarrito').innerHTML = 'Q0.00';
             return;
         }
-
         tbody.innerHTML = carrito.map((p, i) => `
             <tr>
                 <td>${p.nombre}</td>
-                <td><input type="number" class="form-control form-control-sm" value="${p.cantidad}" style="width:80px" onchange="actualizarCantidad(${i}, this.value)"></td>
+                <td><input type="number" class="form-control form-control-sm" value="${p.cantidad}" style="width:80px" min="1" max="${p.stockMaximo}" onchange="actualizarCantidad(${i}, this.value)"></td>
                 <td>Q${p.precio.toFixed(2)}</td>
                 <td>Q${p.subtotal.toFixed(2)}</td>
                 <td><button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${i})"><i class="fas fa-trash"></i></button></td>
             </tr>
         `).join('');
-
         document.getElementById('totalCarrito').innerHTML = `Q${totalVenta.toFixed(2)}`;
     }
 
     function actualizarCantidad(index, nuevaCantidad) {
-        carrito[index].cantidad = parseInt(nuevaCantidad);
-        carrito[index].subtotal = carrito[index].cantidad * carrito[index].precio;
+        let nuevaCant = parseInt(nuevaCantidad);
+        let producto = carrito[index];
+
+        if (nuevaCant > producto.stockMaximo) {
+            mostrarAlerta(`No hay suficiente stock. Máximo: ${producto.stockMaximo}`, 'warning');
+            nuevaCant = producto.stockMaximo;
+        }
+
+        if (nuevaCant <= 0) {
+            eliminarDelCarrito(index);
+            return;
+        }
+
+        producto.cantidad = nuevaCant;
+        producto.subtotal = producto.cantidad * producto.precio;
         actualizarCarrito();
     }
 
@@ -796,25 +658,19 @@
     }
 
     function finalizarVenta() {
-        const clienteId = document.getElementById('clienteSelect').value;
-        const fecha = document.getElementById('fechaVenta').value;
+        let clienteId = document.getElementById('clienteSelect').value;
+        let fecha = document.getElementById('fechaVenta').value;
+        let usuarioId = $('#usuarioActualId').val();
 
-        if (!clienteId) {
-            mostrarAlerta('Seleccione un cliente', 'warning');
-            return;
-        }
+        if (!clienteId) { mostrarAlerta('Seleccione un cliente', 'warning'); return; }
+        if (carrito.length === 0) { mostrarAlerta('Agregue productos a la venta', 'warning'); return; }
 
-        if (carrito.length === 0) {
-            mostrarAlerta('Agregue productos a la venta', 'warning');
-            return;
-        }
-
-        const ventaData = {
+        let ventaData = {
             fechaVenta: fecha,
             total: totalVenta,
             estado: 1,
             cliente: { dpiCliente: clienteId },
-            usuario: { codigoUsuario: [[${session.usuario.codigoUsuario}]] }
+            usuario: { codigoUsuario: parseInt(usuarioId) }
         };
 
         $.ajax({
@@ -824,36 +680,37 @@
             data: JSON.stringify(ventaData),
             success: function(venta) {
                 let detallesCompletados = 0;
-                carrito.forEach(producto => {
-                    const detalleData = {
-                        cantidad: producto.cantidad,
-                        precioUnitario: producto.precio,
-                        subtotal: producto.subtotal,
-                        producto: { codigoProducto: parseInt(producto.id) },
-                        venta: { codigoVenta: venta.codigoVenta }
-                    };
+                let errores = false;
 
+                carrito.forEach(producto => {
                     $.ajax({
                         url: '/detalleVentas',
                         method: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify(detalleData),
+                        data: JSON.stringify({
+                            cantidad: producto.cantidad,
+                            precioUnitario: producto.precio,
+                            subtotal: producto.subtotal,
+                            producto: { codigoProducto: parseInt(producto.id) },
+                            venta: { codigoVenta: venta.codigoVenta }
+                        }),
                         success: function() {
                             detallesCompletados++;
-                            if (detallesCompletados === carrito.length) {
+                            if (detallesCompletados === carrito.length && !errores) {
                                 mostrarAlerta('Venta registrada exitosamente', 'success');
                                 verFactura(venta.codigoVenta);
                                 cargarPagina('ventas');
                             }
                         },
-                        error: function() {
-                            mostrarAlerta('Error al registrar detalles', 'danger');
+                        error: function(xhr) {
+                            errores = true;
+                            mostrarAlerta('Error al registrar detalles: ' + (xhr.responseText || 'Error desconocido'), 'danger');
                         }
                     });
                 });
             },
-            error: function() {
-                mostrarAlerta('Error al registrar la venta', 'danger');
+            error: function(xhr) {
+                mostrarAlerta('Error al registrar la venta: ' + (xhr.responseText || 'Error desconocido'), 'danger');
             }
         });
     }
@@ -865,72 +722,60 @@
             let html = `
                 <div class="d-flex justify-content-between mb-3">
                     <h3>Lista de Usuarios</h3>
-                    <button class="btn btn-primary" onclick="mostrarFormularioUsuario()">
-                        <i class="fas fa-plus"></i> Nuevo Usuario
-                    </button>
+                    <button class="btn btn-primary" onclick="mostrarFormularioUsuario()"><i class="fas fa-plus"></i> Nuevo Usuario</button>
                 </div>
                 <table class="table table-striped" id="tablaUsuarios">
-                    <thead class="table-dark">
-                        <tr><th>Código</th><th>Username</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
-                    </thead>
-                    <tbody>
-                        ${data.map(u => `
-                            <tr>
-                                <td>${u.codigoUsuario}</td>
-                                <td>${u.username}</td>
-                                <td>${u.nombreCompleto}</td>
-                                <td>${u.email}</td>
-                                <td><span class="badge bg-info">${u.rol}</span></td>
-                                <td>${u.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editarUsuario(${u.codigoUsuario})"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.codigoUsuario})"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
+                    <thead class="table-dark"><tr><th>Código</th><th>Username</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>${data.map(u => `<tr><td>${u.codigoUsuario}</td><td>${u.username}</td><td>${u.nombreCompleto}</td><td>${u.email}</td><td><span class="badge bg-info">${u.rol}</span></td><td>${u.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td><td><button class="btn btn-sm btn-warning" onclick="editarUsuario(${u.codigoUsuario})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.codigoUsuario})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}</tbody>
                 </table>
             `;
             $('#contenidoPrincipal').html(html);
-            if ($.fn.DataTable.isDataTable('#tablaUsuarios')) {
-                $('#tablaUsuarios').DataTable().destroy();
-            }
-            $('#tablaUsuarios').DataTable({language: {url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'}});
+            if ($.fn.DataTable.isDataTable('#tablaUsuarios')) $('#tablaUsuarios').DataTable().destroy();
+            $('#tablaUsuarios').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } });
         });
     }
 
     function mostrarFormularioUsuario() {
         $('#modalUsuarioTitulo').text('Nuevo Usuario');
         $('#formUsuario')[0].reset();
-        $('#usuarioCodigo').val('');
+        $('#usuarioCodigoHidden').val('');
+        $('#usuarioPassword').prop('required', true);
         $('#modalUsuario').modal('show');
     }
 
     function editarUsuario(codigo) {
-        $.get('/usuarios/' + codigo, function(usuario) {
+        $.get('/usuarios/' + codigo, function(u) {
             $('#modalUsuarioTitulo').text('Editar Usuario');
-            $('#usuarioCodigo').val(usuario.codigoUsuario);
-            $('#usuarioNombreCompleto').val(usuario.nombreCompleto);
-            $('#usuarioUsername').val(usuario.username);
-            $('#usuarioEmail').val(usuario.email);
-            $('#usuarioRol').val(usuario.rol);
-            $('#usuarioEstado').val(usuario.estado);
-            $('#usuarioPassword').val(usuario.password);
+            $('#usuarioCodigoHidden').val(u.codigoUsuario);
+            $('#usuarioNombreCompleto').val(u.nombreCompleto);
+            $('#usuarioUsername').val(u.username);
+            $('#usuarioEmail').val(u.email);
+            $('#usuarioRol').val(u.rol);
+            $('#usuarioEstado').val(u.estado);
+            $('#usuarioPassword').val('').prop('required', false);
             $('#modalUsuario').modal('show');
         });
     }
 
     function guardarUsuario() {
-        let usuario = {
+        let usuarioData = {
             nombreCompleto: $('#usuarioNombreCompleto').val(),
             username: $('#usuarioUsername').val(),
             email: $('#usuarioEmail').val(),
-            password: $('#usuarioPassword').val(),
             rol: $('#usuarioRol').val(),
             estado: parseInt($('#usuarioEstado').val())
         };
 
-        let codigoExistente = $('#usuarioCodigo').val();
+        let codigoExistente = $('#usuarioCodigoHidden').val();
+        let password = $('#usuarioPassword').val();
+
+        if (password && password.trim() !== "") {
+            usuarioData.password = password;
+        } else if (!codigoExistente) {
+            mostrarAlerta('La contraseña es obligatoria para nuevos usuarios', 'warning');
+            return;
+        }
+
         let url = codigoExistente ? '/usuarios/' + codigoExistente : '/usuarios';
         let method = codigoExistente ? 'PUT' : 'POST';
 
@@ -938,46 +783,39 @@
             url: url,
             method: method,
             contentType: 'application/json',
-            data: JSON.stringify(usuario),
+            data: JSON.stringify(usuarioData),
             success: function() {
                 $('#modalUsuario').modal('hide');
                 cargarUsuarios();
                 mostrarAlerta('Usuario guardado exitosamente', 'success');
             },
             error: function(xhr) {
-                mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger');
+                let mensaje = xhr.responseText || 'Error al guardar';
+                if (xhr.status === 400) mensaje = 'Error: Verifique que el username y email no estén duplicados';
+                mostrarAlerta(mensaje, 'danger');
             }
         });
     }
 
     function eliminarUsuario(codigo) {
         if (confirm('¿Estás seguro de eliminar este usuario?')) {
-            $.ajax({
-                url: '/usuarios/' + codigo,
-                method: 'DELETE',
-                success: function() {
-                    cargarUsuarios();
-                    mostrarAlerta('Usuario eliminado', 'success');
-                },
-                error: function() {
-                    mostrarAlerta('Error al eliminar', 'danger');
-                }
-            });
+            $.ajax({ url: '/usuarios/' + codigo, method: 'DELETE', success: function() { cargarUsuarios(); mostrarAlerta('Usuario eliminado', 'success'); } });
         }
     }
 
     // ==================== FACTURA ====================
     function verFactura(codigoVenta) {
-        Promise.all([
-            $.get('/ventas/' + codigoVenta),
-            $.get('/detalleVentas')
-        ]).then(function(responses) {
-            let venta = responses[0];
-            let todosDetalles = responses[1];
-            let detallesVenta = todosDetalles.filter(d => d.venta?.codigoVenta == codigoVenta);
+        Promise.all([$.get('/ventas/' + codigoVenta), $.get('/detalleVentas')]).then(function(respuestas) {
+            let venta = respuestas[0];
+            let todosDetalles = respuestas[1];
+            let detallesVenta = todosDetalles.filter(d => d.ventas?.codigoVenta === codigoVenta);
+
+            if (detallesVenta.length === 0) {
+                detallesVenta = todosDetalles.filter(d => d.ventas?.codigoVenta == codigoVenta);
+            }
 
             let facturaHtml = `
-                <div class="factura" style="font-family: monospace;" id="facturaParaImprimir">
+                <div class="factura">
                     <div class="text-center mb-4">
                         <h2>KINALAPP</h2>
                         <p>Sistema de Ventas</p>
@@ -988,35 +826,19 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <strong>Fecha:</strong> ${new Date(venta.fechaVenta).toLocaleDateString()}<br>
-                            <strong>Cliente:</strong> ${venta.cliente?.nombreCliente} ${venta.cliente?.apellidoCliente}<br>
-                            <strong>DPI:</strong> ${venta.cliente?.dpiCliente}
+                            <strong>Cliente:</strong> ${venta.cliente?.nombreCliente || 'N/A'} ${venta.cliente?.apellidoCliente || ''}<br>
+                            <strong>DPI:</strong> ${venta.cliente?.dpiCliente || 'N/A'}
                         </div>
                         <div class="col-6">
-                            <strong>Vendedor:</strong> ${venta.usuario?.nombreCompleto}<br>
-                            <strong>Usuario:</strong> ${venta.usuario?.username}
+                            <strong>Vendedor:</strong> ${venta.usuario?.nombreCompleto || 'N/A'}<br>
+                            <strong>Usuario:</strong> ${venta.usuario?.username || 'N/A'}
                         </div>
                     </div>
                     <hr>
                     <table class="table table-bordered">
-                        <thead>
-                            <tr><th>Cantidad</th><th>Producto</th><th>Precio</th><th>Subtotal</th></tr>
-                        </thead>
-                        <tbody>
-                            ${detallesVenta.map(d => `
-                                <tr>
-                                    <td>${d.cantidad}</td>
-                                    <td>${d.producto?.nombreProducto}</td>
-                                    <td>Q${d.precioUnitario.toFixed(2)}</td>
-                                    <td>Q${d.subtotal.toFixed(2)}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                        <tfoot>
-                            <tr class="table-secondary">
-                                <td colspan="3" class="text-end"><strong>TOTAL:</strong></td>
-                                <td><strong>Q${venta.total.toFixed(2)}</strong></td>
-                            </tr>
-                        </tfoot>
+                        <thead><tr><th>Cantidad</th><th>Producto</th><th>Precio</th><th>Subtotal</th></tr></thead>
+                        <tbody>${detallesVenta.map(d => `<tr><td>${d.cantidad}</td><td>${d.producto?.nombreProducto || d.productos?.nombreProducto || 'Producto'}</td><td>Q${(d.precioUnitario || 0).toFixed(2)}</td><td>Q${(d.subtotal || 0).toFixed(2)}</td></tr>`).join('')}</tbody>
+                        <tfoot><tr class="table-secondary"><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td><strong>Q${(venta.total || 0).toFixed(2)}</strong></td></tr></tfoot>
                     </table>
                     <hr>
                     <div class="text-center mt-4">
@@ -1025,22 +847,12 @@
                     </div>
                 </div>
             `;
-
             $('#facturaBody').html(facturaHtml);
             $('#modalFactura').modal('show');
+        }).catch(function(error) {
+            console.error('Error al cargar factura:', error);
+            mostrarAlerta('Error al cargar la factura', 'danger');
         });
-    }
-
-    // ==================== ALERTAS ====================
-    function mostrarAlerta(mensaje, tipo) {
-        let alerta = $(`
-            <div class="alert alert-${tipo} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 9999; min-width: 300px;">
-                ${mensaje}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `);
-        $('body').append(alerta);
-        setTimeout(() => alerta.alert('close'), 3000);
     }
 </script>
 </body>

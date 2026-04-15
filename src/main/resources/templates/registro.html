@@ -7,38 +7,247 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
             padding: 20px;
         }
-        .register-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            max-width: 500px;
+
+        /* Efecto decorativo de fondo */
+        body::before {
+            content: '';
+            position: absolute;
             width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.05) 0%, transparent 50%);
+            pointer-events: none;
         }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 80%, rgba(255, 193, 7, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Tarjeta principal */
+        .register-card {
+            background: #1e2a3a;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 550px;
+            width: 100%;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .register-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 193, 7, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header de la tarjeta */
         .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
             color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .register-body {
             padding: 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid #ffc107;
         }
+
+        .register-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #ffc107;
+            border-radius: 2px;
+        }
+
+        .register-header i {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
+            color: #ffc107;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .register-header h2 {
+            font-weight: 700;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .register-header p {
+            opacity: 0.8;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #cbd5e0;
+        }
+
+        /* Cuerpo del formulario */
+        .register-body {
+            padding: 40px;
+            background: #1e2a3a;
+        }
+
+        /* Estilos de formulario */
+        .form-label {
+            font-weight: 600;
+            color: #ffc107;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #2d3a4a;
+            background: #0f172a;
+        }
+
+        .input-group:focus-within {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+        }
+
+        .input-group-text {
+            background: #0f172a;
+            border: none;
+            color: #ffc107;
+            padding: 12px 15px;
+            min-width: 45px;
+            justify-content: center;
+        }
+
+        .form-control {
+            border: none;
+            padding: 12px 15px;
+            font-size: 14px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            outline: none;
+            background: #0f172a;
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: #64748b;
+        }
+
+        /* Botón de registro */
         .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ffc107 0%, #e6a800 100%);
             border: none;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #1a1a2e;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(255, 193, 7, 0.4);
+            background: linear-gradient(135deg, #ffce3a 0%, #ffc107 100%);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        /* Separador */
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ffc107, transparent);
+            margin: 25px 0;
+        }
+
+        /* Enlace */
+        .text-center p {
+            color: #94a3b8;
+        }
+
+        .text-center a {
+            color: #ffc107;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .text-center a:hover {
+            color: #ffce3a;
+            text-decoration: underline;
+        }
+
+        /* Alertas */
+        .alert {
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            animation: slideIn 0.3s ease-out;
+            margin-bottom: 25px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #2d1a1a 0%, #1a1a2e 100%);
+            color: #f87171;
+            border-left: 4px solid #f87171;
         }
     </style>
 </head>
@@ -50,14 +259,16 @@
         <p>Regístrate para comenzar</p>
     </div>
     <div class="register-body">
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+            <i class="fas fa-exclamation-circle me-2"></i> Error
+        </div>
 
         <form action="/registro" method="post" th:object="${usuario}">
             <div class="mb-3">
                 <label class="form-label">Nombre Completo</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="text" th:field="*{nombreCompleto}" class="form-control" required>
+                    <input type="text" th:field="*{nombreCompleto}" class="form-control" required placeholder="Ej: Juan Pérez">
                 </div>
             </div>
 
@@ -65,32 +276,32 @@
                 <label class="form-label">Usuario</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                    <input type="text" th:field="*{username}" class="form-control" required>
+                    <input type="text" th:field="*{username}" class="form-control" required placeholder="Ej: juanperez">
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Email</label>
+                <label class="form-label">Correo Electrónico</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    <input type="email" th:field="*{email}" class="form-control" required>
+                    <input type="email" th:field="*{email}" class="form-control" required placeholder="ejemplo@correo.com">
                 </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-4">
                 <label class="form-label">Contraseña</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" th:field="*{password}" class="form-control" required>
+                    <input type="password" th:field="*{password}" class="form-control" required placeholder="Mínimo 6 caracteres">
                 </div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-register">
-                <i class="fas fa-check-circle"></i> Registrarse
+                <i class="fas fa-check-circle me-2"></i> Registrarse
             </button>
         </form>
 
-        <hr class="my-4">
+        <hr>
 
         <div class="text-center">
             <p>¿Ya tienes cuenta? <a href="/login">Iniciar Sesión</a></p>
