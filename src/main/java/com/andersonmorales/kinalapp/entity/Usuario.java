@@ -1,16 +1,18 @@
 package com.andersonmorales.kinalapp.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Usuarios")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_usuario")
-    private long codigoUsuario;
+    private Long codigoUsuario;  // Cambiado de long a Long
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -28,7 +30,7 @@ public class Usuario {
     private String rol;
 
     @Column(name = "estado", nullable = false)
-    private int estado;
+    private Integer estado;  // Cambiado de int a Integer
 
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
@@ -38,8 +40,8 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(long codigoUsuario, String username, String password, String email,
-                   String nombreCompleto, String rol, int estado,
+    public Usuario(Long codigoUsuario, String username, String password, String email,
+                   String nombreCompleto, String rol, Integer estado,
                    LocalDateTime fechaRegistro, LocalDateTime ultimoLogin) {
         this.codigoUsuario = codigoUsuario;
         this.username = username;
@@ -53,8 +55,8 @@ public class Usuario {
     }
 
     // Getters y Setters
-    public long getCodigoUsuario() { return codigoUsuario; }
-    public void setCodigoUsuario(long codigoUsuario) { this.codigoUsuario = codigoUsuario; }
+    public Long getCodigoUsuario() { return codigoUsuario; }
+    public void setCodigoUsuario(Long codigoUsuario) { this.codigoUsuario = codigoUsuario; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -71,8 +73,8 @@ public class Usuario {
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
 
-    public int getEstado() { return estado; }
-    public void setEstado(int estado) { this.estado = estado; }
+    public Integer getEstado() { return estado; }
+    public void setEstado(Integer estado) { this.estado = estado; }
 
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
