@@ -21,14 +21,17 @@ public class ProductosService implements IProductosService {
     @Override
     @Transactional(readOnly = true)
     public List<Productos> listarTodos() {
-
         return productosRepository.findAll();
     }
 
     @Override
     public Productos guardar(Productos productos) {
-
         validarProducto(productos);
+
+        // Si el código es null, JPA generará uno nuevo automáticamente
+        if (productos.getCodigoProducto() == null || productos.getCodigoProducto() == 0) {
+            productos.setCodigoProducto(null);
+        }
 
         if (productos.getEstado() == 0) {
             productos.setEstado(1);
@@ -39,15 +42,13 @@ public class ProductosService implements IProductosService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Productos> buscarPorCodigo(long codigo) {
-
+    public Optional<Productos> buscarPorCodigo(Long codigo) {
         return productosRepository.findById(codigo);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Productos> buscarPorEstado(int estado) {
-
         return productosRepository.findAll()
                 .stream()
                 .filter(producto -> producto.getEstado() == estado)
@@ -55,45 +56,35 @@ public class ProductosService implements IProductosService {
     }
 
     @Override
-    public Productos actualizar(long codigo, Productos producto) {
-
+    public Productos actualizar(Long codigo, Productos producto) {
         if (!productosRepository.existsById(codigo)) {
             throw new RuntimeException("Producto no encontrado con código " + codigo);
         }
-
         producto.setCodigoProducto(codigo);
-
         validarProducto(producto);
-
         return productosRepository.save(producto);
     }
 
     @Override
-    public void eliminar(long codigo) {
-
+    public void eliminar(Long codigo) {
         if (!productosRepository.existsById(codigo)) {
             throw new RuntimeException("Producto no encontrado con código " + codigo);
         }
-
         productosRepository.deleteById(codigo);
     }
 
     @Override
-    public boolean existePorCodigo(long codigo) {
-
+    public boolean existePorCodigo(Long codigo) {
         return productosRepository.existsById(codigo);
     }
 
     private void validarProducto(Productos producto) {
-
         if (producto.getNombreProducto() == null || producto.getNombreProducto().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del producto es obligatorio");
         }
-
         if (producto.getPrecio() <= 0) {
             throw new IllegalArgumentException("El precio debe ser mayor a 0");
         }
-
         if (producto.getStock() < 0) {
             throw new IllegalArgumentException("El stock no puede ser negativo");
         }
