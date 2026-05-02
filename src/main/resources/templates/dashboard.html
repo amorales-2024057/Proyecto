@@ -137,7 +137,7 @@
             <div class="text-center py-4">
                 <i class="fas fa-store fa-3x" style="color: #ffd966;"></i>
                 <h4 class="text-white mt-2">KinalApp</h4>
-                <small class="text-white-50" th:text="${session.usuario.nombreCompleto}"></small>
+                <small class="text-white-50" th:text="${nombreCompleto}"></small>
             </div>
             <nav class="nav flex-column px-3">
                 <a class="nav-link" onclick="cargarPagina('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -146,8 +146,15 @@
                 <a class="nav-link" onclick="cargarPagina('ventas')"><i class="fas fa-shopping-cart"></i> Ventas</a>
                 <a class="nav-link" onclick="cargarPagina('nuevaVenta')"><i class="fas fa-plus-circle"></i> Nueva Venta</a>
                 <a class="nav-link" onclick="cargarPagina('usuarios')"><i class="fas fa-users-cog"></i> Usuarios</a>
+                <a class="nav-link" th:if="${rol == 'ADMIN'}" href="/admin" style="color:#ffd700;"><i class="fas fa-shield-alt"></i> Panel Admin</a>
                 <hr class="bg-light">
-                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                <!-- ✅ Formulario de logout CORREGIDO con CSRF -->
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="nav-link btn btn-link p-0" style="text-align:left; width:100%;">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </form>
             </nav>
         </div>
 
@@ -157,10 +164,10 @@
                 <div>
                     <span class="me-3">
                         <i class="fas fa-user-circle"></i>
-                        <span th:text="${session.usuario.username}"></span>
-                        <span class="badge bg-info ms-2" th:text="${session.usuario.rol}"></span>
+                        <span th:text="${username}"></span>
+                        <span class="badge bg-info ms-2" th:text="${rol}"></span>
                     </span>
-                    <input type="hidden" id="usuarioActualId" th:value="${session.usuario.codigoUsuario}">
+                    <input type="hidden" id="usuarioActualId" th:value="${codigoUsuario}">
                 </div>
             </nav>
             <div class="p-4" id="contenidoPrincipal"></div>
@@ -168,7 +175,6 @@
     </div>
 </div>
 
-<!-- Modal Cliente -->
 <div class="modal fade" id="modalCliente" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -194,7 +200,6 @@
     </div>
 </div>
 
-<!-- Modal Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -219,7 +224,6 @@
     </div>
 </div>
 
-<!-- Modal Usuario -->
 <div class="modal fade" id="modalUsuario" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -246,7 +250,6 @@
     </div>
 </div>
 
-<!-- Modal Factura -->
 <div class="modal fade" id="modalFactura" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
