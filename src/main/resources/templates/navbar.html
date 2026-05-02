@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<nav th:fragment="header" class="navbar-modern" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="logo">App<span>Core</span></div>
+    <ul class="nav-links">
+        <li>
+            <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">
+                Dashboard
+            </a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}" th:classappend="${#httpServletRequest.requestURI.startsWith('/admin') ? 'active' : ''}">
+                Administración
+            </a>
+        </li>
+    </ul>
+    <div class="user-profile" sec:authorize="isAuthenticated()">
+        <span sec:authentication="name">Nombre</span>
+    </div>
+    <!-- En el navbar del dashboard, el formulario de logout debe tener CSRF -->
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="nav-link btn btn-link p-0" style="text-align:left; width:100%;">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+    </form>
+</nav>
