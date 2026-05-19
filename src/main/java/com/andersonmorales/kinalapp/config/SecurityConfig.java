@@ -2,6 +2,8 @@ package com.andersonmorales.kinalapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -14,14 +16,26 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/registro").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/clientes/**", "/productos/**", "/ventas/**",
+                                "/detalleVentas/**", "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/clientes/**", "/productos/**", "/ventas/**",
+                                "/detalleVentas/**", "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/clientes/**", "/productos/**", "/ventas/**",
+                                "/detalleVentas/**", "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,
+                                "/clientes/**", "/productos/**", "/ventas/**",
+                                "/detalleVentas/**", "/usuarios/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
