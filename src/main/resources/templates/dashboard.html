@@ -9,6 +9,161 @@
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #e2e8f0; }
+
+        .sidebar {
+            min-height: 100vh;
+            background: #1e2a3a;
+            border-right: 1px solid rgba(255,193,7,0.2);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+        }
+        .sidebar-brand { padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255,193,7,0.2); }
+        .sidebar-brand i { color: #ffc107; }
+        .sidebar-brand h4 { color: #ffffff; margin-top: 10px; font-weight: 700; }
+        .sidebar-brand small { color: #94a3b8; }
+
+        .nav-link {
+            color: #cbd5e0;
+            padding: 12px 20px;
+            margin: 3px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: block;
+            border: none;
+            background: none;
+            width: calc(100% - 20px);
+            text-align: left;
+        }
+        .nav-link:hover { background: rgba(255,193,7,0.12); color: #ffc107; transform: translateX(4px); }
+        .nav-link.active { background: rgba(255,193,7,0.2); color: #ffc107; border-left: 3px solid #ffc107; }
+        .nav-link i { margin-right: 10px; width: 18px; }
+        .nav-divider { border-color: rgba(255,193,7,0.2); margin: 10px 15px; }
+
+        .topbar {
+            background: #1e2a3a;
+            border-bottom: 1px solid rgba(255,193,7,0.2);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topbar h5 { color: #ffc107; font-weight: 600; margin: 0; }
+        .topbar .user-info { color: #cbd5e0; font-size: 14px; }
+        .topbar .badge { background: rgba(255,193,7,0.2); color: #ffc107; border: 1px solid rgba(255,193,7,0.4); }
+
+        .main-content { padding: 24px; }
+
+        .card {
+            background: #1e2a3a;
+            border: 1px solid rgba(255,193,7,0.15);
+            border-radius: 16px;
+            color: #e2e8f0;
+        }
+        .card-header {
+            background: rgba(255,193,7,0.08) !important;
+            border-bottom: 1px solid rgba(255,193,7,0.2);
+            border-radius: 16px 16px 0 0 !important;
+            color: #ffc107 !important;
+            font-weight: 600;
+            padding: 14px 20px;
+        }
+        .card-body { padding: 20px; }
+
+        .stat-card {
+            background: #1e2a3a;
+            border: 1px solid rgba(255,193,7,0.2);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(255,193,7,0.15); border-color: rgba(255,193,7,0.5); }
+        .stat-card h6 { color: #94a3b8; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .stat-card h2 { color: #ffc107; font-weight: 700; font-size: 2.2rem; margin: 0; }
+        .stat-card i { color: #ffc107; opacity: 0.7; }
+
+        .table { color: #e2e8f0 !important; }
+        .table thead th { background: rgba(255,193,7,0.1) !important; color: #ffc107 !important; border-bottom: 2px solid rgba(255,193,7,0.3); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .table tbody tr:hover { background: rgba(255,193,7,0.05); }
+        .table td { color: #e2e8f0 !important; vertical-align: middle; border-color: rgba(255,255,255,0.05); }
+        .table-striped > tbody > tr:nth-of-type(odd) > * { background-color: rgba(255,193,7,0.03); color: #e2e8f0 !important; }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate { color: #cbd5e0 !important; margin: 8px 0; }
+        .dataTables_wrapper .dataTables_filter input {
+            background: #0f172a; border: 1px solid rgba(255,193,7,0.3);
+            color: #e2e8f0; border-radius: 8px; padding: 5px 10px;
+        }
+        .dataTables_wrapper .dataTables_length select {
+            background: #0f172a; color: #e2e8f0;
+            border: 1px solid rgba(255,193,7,0.3); border-radius: 8px;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background: #0f172a !important; color: #ffc107 !important;
+            border: 1px solid rgba(255,193,7,0.3) !important; border-radius: 6px !important; margin: 2px;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: rgba(255,193,7,0.2) !important; color: #ffc107 !important;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: rgba(255,193,7,0.25) !important; color: #ffc107 !important;
+            border-color: #ffc107 !important;
+        }
+
+        .modal-content { background: #1e2a3a; border: 1px solid rgba(255,193,7,0.3); border-radius: 20px; color: #e2e8f0; }
+        .modal-header { background: rgba(255,193,7,0.1); border-bottom: 1px solid rgba(255,193,7,0.2); border-radius: 20px 20px 0 0; color: #ffc107; }
+        .modal-footer { border-top: 1px solid rgba(255,193,7,0.2); }
+        .btn-close { filter: invert(1); }
+
+        .form-control, .form-select {
+            background: #0f172a; border: 1px solid rgba(255,193,7,0.25);
+            color: #e2e8f0 !important; border-radius: 10px;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #0f172a; color: #e2e8f0;
+            border-color: #ffc107; box-shadow: 0 0 0 3px rgba(255,193,7,0.15);
+        }
+        .form-control::placeholder { color: #64748b; }
+        label { color: #ffc107; font-weight: 500; font-size: 14px; margin-bottom: 6px; display: block; }
+
+        .btn-primary { background: linear-gradient(135deg, #ffc107, #e6a800); color: #1a1a2e; border: none; font-weight: 600; border-radius: 10px; }
+        .btn-primary:hover { background: linear-gradient(135deg, #ffce3a, #ffc107); color: #1a1a2e; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255,193,7,0.35); }
+        .btn-success { background: linear-gradient(135deg, #1e4a2f, #0e2a1a); color: #ffc107; border: 1px solid rgba(255,193,7,0.3); font-weight: 600; border-radius: 10px; }
+        .btn-success:hover { background: linear-gradient(135deg, #2a6e42, #1a4028); color: #ffce3a; transform: translateY(-1px); }
+        .btn-warning { background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.4); font-weight: 600; border-radius: 8px; }
+        .btn-warning:hover { background: rgba(255,193,7,0.3); color: #ffce3a; }
+        .btn-danger { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.35); font-weight: 600; border-radius: 8px; }
+        .btn-danger:hover { background: rgba(248,113,113,0.25); color: #fca5a5; }
+        .btn-info { background: rgba(56,189,248,0.12); color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); font-weight: 600; border-radius: 8px; }
+        .btn-info:hover { background: rgba(56,189,248,0.25); color: #7dd3fc; }
+        .btn-secondary { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); border-radius: 10px; }
+
+        .badge-activo { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+        .badge-inactivo { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.3); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+        .badge-rol { background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+
+        .factura-box { background: #1e2a3a; border: 1px solid rgba(255,193,7,0.2); border-radius: 12px; padding: 24px; color: #e2e8f0; }
+        .factura-box h2, .factura-box h4 { color: #ffc107; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,193,7,0.5); border-radius: 10px; }
+
+        .alert-custom { background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.3); color: #ffc107; border-radius: 12px; padding: 12px 18px; }
+
+        @media print {
+            .no-print, .sidebar, .topbar, .btn, .modal-footer { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .factura-box { background: white !important; color: black !important; border: 1px solid #ccc; }
+        }
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
         * { font-family: 'Playfair Display', 'Times New Roman', serif; }
         body { background: #0a0c10; color: #e0e0e0; }
@@ -66,6 +221,29 @@
 <input type="hidden" id="csrfToken" th:value="${_csrf.token}">
 <input type="hidden" id="csrfHeader" th:value="${_csrf.headerName}">
 <input type="hidden" id="esAdmin" th:value="${esAdmin}">
+<input type="hidden" id="usuarioActualId" th:value="${codigoUsuario}">
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+
+        <div class="col-md-2 sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-store fa-2x"></i>
+                <h4>KinalApp</h4>
+                <small th:text="${nombreCompleto}"></small>
+            </div>
+            <nav class="py-3">
+                <button class="nav-link" onclick="cargarPagina('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+                <button class="nav-link" onclick="cargarPagina('clientes')"><i class="fas fa-users"></i> Clientes</button>
+                <button class="nav-link" onclick="cargarPagina('productos')"><i class="fas fa-box"></i> Productos</button>
+                <button class="nav-link" onclick="cargarPagina('ventas')"><i class="fas fa-shopping-cart"></i> Ventas</button>
+                <button class="nav-link" onclick="cargarPagina('nuevaVenta')"><i class="fas fa-plus-circle"></i> Nueva Venta</button>
+                <button class="nav-link" onclick="cargarPagina('detalleVentas')"><i class="fas fa-list-alt"></i> Detalle Ventas</button>
+                <button class="nav-link" onclick="cargarPagina('usuarios')"><i class="fas fa-users-cog"></i> Usuarios</button>
+                <hr class="nav-divider">
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="nav-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
 
 <div class="container-fluid">
     <div class="row">
@@ -92,6 +270,13 @@
             </nav>
         </div>
 
+        <div class="col-md-10 d-flex flex-column" style="min-height:100vh;">
+            <div class="topbar no-print">
+                <h5 id="tituloPagina"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h5>
+                <div class="user-info d-flex align-items-center gap-2">
+                    <i class="fas fa-user-circle" style="color:#ffc107;font-size:18px;"></i>
+                    <span th:text="${username}"></span>
+                    <span class="badge" th:text="${rol}"></span>
         <div class="col-md-10 p-0">
             <nav class="navbar navbar-top px-4 py-2 d-flex justify-content-between">
                 <div><h5 class="mb-0" id="tituloPagina">Dashboard</h5></div>
@@ -101,9 +286,10 @@
                     <span class="badge bg-info ms-2" th:text="${rol}"></span>
                     <input type="hidden" id="usuarioActualId" th:value="${codigoUsuario}">
                 </div>
-            </nav>
-            <div class="p-4" id="contenidoPrincipal"></div>
+            </div>
+            <div class="main-content flex-grow-1" id="contenidoPrincipal"></div>
         </div>
+
     </div>
 </div>
 
@@ -111,10 +297,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalClienteTitulo"><i class="fas fa-user-plus"></i> Cliente</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="modalClienteTitulo">Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="clienteDpiHidden">
+                <div class="mb-3"><label>DPI</label><input type="text" class="form-control" id="clienteDpi" required></div>
+                <div class="mb-3"><label>Nombre</label><input type="text" class="form-control" id="clienteNombre" required></div>
+                <div class="mb-3"><label>Apellido</label><input type="text" class="form-control" id="clienteApellido" required></div>
+                <div class="mb-3"><label>Dirección</label><input type="text" class="form-control" id="clienteDireccion" required></div>
+                <div class="mb-3"><label>Estado</label><select class="form-select" id="clienteEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 <form id="formCliente">
                     <input type="hidden" id="clienteDpiHidden">
                     <div class="mb-3"><label>DPI</label><input type="text" class="form-control" id="clienteDpi" required></div>
@@ -125,8 +317,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
             </div>
         </div>
     </div>
@@ -136,10 +328,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalProductoTitulo"><i class="fas fa-box-open"></i> Producto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="modalProductoTitulo">Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="productoCodigoHidden">
+                <div class="mb-3"><label>Nombre</label><input type="text" class="form-control" id="productoNombre" required></div>
+                <div class="mb-3"><label>Precio</label><input type="number" step="0.01" class="form-control" id="productoPrecio" required></div>
+                <div class="mb-3"><label>Stock</label><input type="number" class="form-control" id="productoStock" required></div>
+                <div class="mb-3"><label>Estado</label><select class="form-select" id="productoEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 <form id="formProducto">
                     <input type="hidden" id="productoCodigoHidden">
                     <div class="mb-3"><label>Nombre</label><input type="text" class="form-control" id="productoNombre" required></div>
@@ -149,8 +346,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="guardarProducto()">Guardar</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardarProducto()">Guardar</button>
             </div>
         </div>
     </div>
@@ -160,6 +357,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="modalUsuarioTitulo">Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="usuarioCodigoHidden">
+                <div class="mb-3"><label>Nombre Completo</label><input type="text" class="form-control" id="usuarioNombreCompleto" required></div>
+                <div class="mb-3"><label>Username</label><input type="text" class="form-control" id="usuarioUsername" required></div>
+                <div class="mb-3"><label>Email</label><input type="email" class="form-control" id="usuarioEmail" required></div>
+                <div class="mb-3"><label>Contraseña</label><input type="password" class="form-control" id="usuarioPassword"><small style="color:#94a3b8;">Dejar en blanco para mantener la actual</small></div>
+                <div class="mb-3"><label>Rol</label><select class="form-select" id="usuarioRol"><option value="ADMIN">Administrador</option><option value="VENDEDOR">Vendedor</option><option value="INVENTARIO">Inventario</option></select></div>
+                <div class="mb-3"><label>Estado</label><select class="form-select" id="usuarioEstado"><option value="1">Activo</option><option value="0">Inactivo</option></select></div>
                 <h5 class="modal-title" id="modalUsuarioTitulo"><i class="fas fa-user-shield"></i> Usuario</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -175,8 +383,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" onclick="guardarUsuario()">Guardar</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardarUsuario()">Guardar</button>
             </div>
         </div>
     </div>
@@ -186,13 +394,13 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-file-invoice"></i> Factura de Venta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title"><i class="fas fa-file-invoice me-2"></i>Factura de Venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="facturaBody"></div>
             <div class="modal-footer no-print">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-1"></i> Imprimir</button>
             </div>
         </div>
     </div>
@@ -204,6 +412,15 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
+    const CSRF_TOKEN  = document.getElementById('csrfToken').value;
+    const CSRF_HEADER = document.getElementById('csrfHeader').value;
+    const ES_ADMIN    = document.getElementById('esAdmin').value === 'true';
+    let carrito = [];
+    let totalVenta = 0;
+
+    $.ajaxSetup({ beforeSend: function(xhr) { xhr.setRequestHeader(CSRF_HEADER, CSRF_TOKEN); } });
+
+    $(document).ready(function() { cargarPagina('dashboard'); });
     const CSRF_TOKEN = document.getElementById('csrfToken').value;
     const CSRF_HEADER = document.getElementById('csrfHeader').value;
     const ES_ADMIN = document.getElementById('esAdmin').value === 'true';
@@ -222,12 +439,84 @@
     });
 
     function cargarPagina(pagina) {
-        if (pagina === 'dashboard') cargarDashboard();
+        $('.nav-link').removeClass('active');
+        $(`.nav-link[onclick="cargarPagina('${pagina}')"]`).addClass('active');
+        const titulos = {
+            dashboard: 'Dashboard', clientes: 'Clientes', productos: 'Productos',
+            ventas: 'Ventas', nuevaVenta: 'Nueva Venta', detalleVentas: 'Detalle de Ventas', usuarios: 'Usuarios'
+        };
+        $('#tituloPagina').html(`<i class="fas fa-tachometer-alt me-2"></i>${titulos[pagina] || pagina}`);
+        if (pagina === 'dashboard')     cargarDashboard();
         else if (pagina === 'clientes') cargarClientes();
         else if (pagina === 'productos') cargarProductos();
-        else if (pagina === 'ventas') cargarVentas();
+        else if (pagina === 'ventas')   cargarVentas();
         else if (pagina === 'nuevaVenta') cargarNuevaVenta();
+        else if (pagina === 'detalleVentas') cargarDetalleVentas();
         else if (pagina === 'usuarios') cargarUsuarios();
+    }
+
+    function alerta(msg, tipo) {
+        let a = $(`<div class="alert alert-${tipo} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index:9999;min-width:280px;">${msg}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`);
+        $('body').append(a);
+        setTimeout(() => a.alert('close'), 3000);
+    }
+
+    function dtLang() { return { language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } }; }
+
+    function destroyDT(id) { if ($.fn.DataTable.isDataTable(id)) $(id).DataTable().destroy(); }
+
+    function estadoBadge(estado) {
+        return estado == 1 ? '<span class="badge-activo">Activo</span>' : '<span class="badge-inactivo">Inactivo</span>';
+    }
+
+    function cargarDashboard() {
+        Promise.all([$.get('/clientes'), $.get('/productos'), $.get('/ventas'), $.get('/usuarios')]).then(function(r) {
+            let [clientes, productos, ventas, usuarios] = r;
+            let totalMonto = ventas.reduce((s, v) => s + (v.total || 0), 0);
+            let recientes = ventas.slice(-5).reverse();
+            $('#contenidoPrincipal').html(`
+                <div class="row mb-4">
+                    <div class="col-6 col-md-3 mb-3"><div class="stat-card" onclick="cargarPagina('clientes')"><i class="fas fa-users fa-2x mb-2"></i><h6>Clientes</h6><h2>${clientes.length}</h2></div></div>
+                    <div class="col-6 col-md-3 mb-3"><div class="stat-card" onclick="cargarPagina('productos')"><i class="fas fa-box fa-2x mb-2"></i><h6>Productos</h6><h2>${productos.length}</h2></div></div>
+                    <div class="col-6 col-md-3 mb-3"><div class="stat-card" onclick="cargarPagina('ventas')"><i class="fas fa-shopping-cart fa-2x mb-2"></i><h6>Ventas</h6><h2>${ventas.length}</h2></div></div>
+                    <div class="col-6 col-md-3 mb-3"><div class="stat-card" onclick="cargarPagina('usuarios')"><i class="fas fa-users-cog fa-2x mb-2"></i><h6>Usuarios</h6><h2>${usuarios.length}</h2></div></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-clock me-2"></i>Ventas Recientes</div>
+                            <div class="card-body p-0">
+                                <table class="table mb-0">
+                                    <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr></thead>
+                                    <tbody>${recientes.map(v => `<tr>
+                                        <td>${v.codigoVenta}</td>
+                                        <td>${v.fechaVenta}</td>
+                                        <td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td>
+                                        <td>Q${(v.total||0).toFixed(2)}</td>
+                                        <td>${estadoBadge(v.estado)}</td>
+                                    </tr>`).join('')}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-header"><i class="fas fa-chart-bar me-2"></i>Resumen</div>
+                            <div class="card-body">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        <tr><td style="color:#94a3b8;">Total clientes</td><td><strong>${clientes.length}</strong></td></tr>
+                                        <tr><td style="color:#94a3b8;">Total productos</td><td><strong>${productos.length}</strong></td></tr>
+                                        <tr><td style="color:#94a3b8;">Total ventas</td><td><strong>${ventas.length}</strong></td></tr>
+                                        <tr><td style="color:#94a3b8;">Total usuarios</td><td><strong>${usuarios.length}</strong></td></tr>
+                                        <tr><td style="color:#94a3b8;">Monto total</td><td><strong style="color:#ffc107;">Q${totalMonto.toFixed(2)}</strong></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
         $('.sidebar .nav-link').removeClass('active');
         $(`.sidebar .nav-link[onclick="cargarPagina('${pagina}')"]`).addClass('active');
     }
@@ -291,8 +580,34 @@
     }
 
     function cargarClientes() {
-        $('#tituloPagina').text('Clientes');
         $.get('/clientes', function(data) {
+            let btn = ES_ADMIN ? `<button class="btn btn-primary btn-sm" onclick="mostrarFormCliente()"><i class="fas fa-plus me-1"></i>Nuevo Cliente</button>` : '';
+            let colAccion = ES_ADMIN ? '<th>Acciones</th>' : '';
+            let filas = data.map(c => `<tr>
+                <td>${c.DPICliente}</td>
+                <td>${c.nombreCliente}</td>
+                <td>${c.apellidoCliente}</td>
+                <td>${c.direccion}</td>
+                <td>${estadoBadge(c.estado)}</td>
+                ${ES_ADMIN ? `<td>
+                    <button class="btn btn-warning btn-sm me-1" onclick="editarCliente('${c.DPICliente}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarCliente('${c.DPICliente}')"><i class="fas fa-trash"></i></button>
+                </td>` : ''}
+            </tr>`).join('');
+            $('#contenidoPrincipal').html(`
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-users me-2"></i>Clientes</span>${btn}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tablaClientes">
+                            <thead><tr><th>DPI</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th>Estado</th>${colAccion}</tr></thead>
+                            <tbody>${filas}</tbody>
+                        </table>
+                    </div>
+                </div>`);
+            destroyDT('#tablaClientes');
+            $('#tablaClientes').DataTable(dtLang());
             let botonNuevo = ES_ADMIN ? `<button class="btn btn-primary" onclick="mostrarFormularioCliente()"><i class="fas fa-plus"></i> Nuevo Cliente</button>` : '';
             let html = `
                 <div class="d-flex justify-content-between mb-3">
@@ -322,10 +637,12 @@
         });
     }
 
-    function mostrarFormularioCliente() {
+    function mostrarFormCliente() {
         $('#modalClienteTitulo').text('Nuevo Cliente');
-        $('#formCliente')[0].reset();
         $('#clienteDpiHidden').val('');
+        $('#clienteDpi').val('').prop('readonly', false);
+        $('#clienteNombre, #clienteApellido, #clienteDireccion').val('');
+        $('#clienteEstado').val('1');
         $('#clienteDpi').prop('readonly', false);
         new bootstrap.Modal(document.getElementById('modalCliente')).show();
     }
@@ -333,8 +650,8 @@
     function editarCliente(dpi) {
         $.get('/clientes/' + dpi, function(c) {
             $('#modalClienteTitulo').text('Editar Cliente');
-            $('#clienteDpiHidden').val(c.dpiCliente);
-            $('#clienteDpi').val(c.dpiCliente).prop('readonly', true);
+            $('#clienteDpiHidden').val(c.DPICliente);
+            $('#clienteDpi').val(c.DPICliente).prop('readonly', true);
             $('#clienteNombre').val(c.nombreCliente);
             $('#clienteApellido').val(c.apellidoCliente);
             $('#clienteDireccion').val(c.direccion);
@@ -344,14 +661,21 @@
     }
 
     function guardarCliente() {
-        let clienteData = {
-            dpiCliente: $('#clienteDpi').val(),
+        let dpiVal = $('#clienteDpi').val().trim();
+        if (!dpiVal) { alerta('El DPI es obligatorio', 'warning'); return; }
+        let data = {
+            DPICliente: dpiVal,
             nombreCliente: $('#clienteNombre').val(),
             apellidoCliente: $('#clienteApellido').val(),
             direccion: $('#clienteDireccion').val(),
             estado: parseInt($('#clienteEstado').val())
         };
         let dpiExistente = $('#clienteDpiHidden').val();
+        $.ajax({
+            url: dpiExistente ? '/clientes/' + dpiExistente : '/clientes',
+            method: dpiExistente ? 'PUT' : 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
         let url = dpiExistente ? '/clientes/' + dpiExistente : '/clientes';
         let method = dpiExistente ? 'PUT' : 'POST';
         $.ajax({
@@ -360,13 +684,20 @@
             success: function() {
                 bootstrap.Modal.getInstance(document.getElementById('modalCliente')).hide();
                 cargarClientes();
-                mostrarAlerta('Cliente guardado exitosamente', 'success');
+                alerta('Cliente guardado exitosamente', 'success');
             },
+            error: function(xhr) { alerta(xhr.responseText || 'Error al guardar el cliente', 'danger'); }
             error: function(xhr) { mostrarAlerta(xhr.responseText || 'Error al guardar', 'danger'); }
         });
     }
 
     function eliminarCliente(dpi) {
+        if (!confirm('¿Desactivar este cliente?')) return;
+        $.ajax({
+            url: '/clientes/' + dpi, method: 'DELETE',
+            success: function() { cargarClientes(); alerta('Cliente desactivado', 'success'); },
+            error: function(xhr) { alerta(xhr.responseText || 'Error', 'danger'); }
+        });
         if (confirm('¿Estás seguro de eliminar este cliente?')) {
             $.ajax({
                 url: '/clientes/' + dpi, method: 'DELETE',
@@ -377,8 +708,35 @@
     }
 
     function cargarProductos() {
-        $('#tituloPagina').text('Productos');
         $.get('/productos', function(data) {
+            let btn = ES_ADMIN ? `<button class="btn btn-primary btn-sm" onclick="mostrarFormProducto()"><i class="fas fa-plus me-1"></i>Nuevo Producto</button>` : '';
+            let colAccion = ES_ADMIN ? '<th>Acciones</th>' : '';
+            let filas = data.map(p => `<tr>
+                <td>${p.codigoProducto}</td>
+                <td>${p.nombreProducto}</td>
+                <td>Q${parseFloat(p.precio).toFixed(2)}</td>
+                <td>${p.stock}</td>
+                <td>${estadoBadge(p.estado)}</td>
+                ${ES_ADMIN ? `<td>
+                    <button class="btn btn-warning btn-sm me-1" onclick="editarProducto(${p.codigoProducto})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${p.codigoProducto})"><i class="fas fa-trash"></i></button>
+                </td>` : ''}
+            </tr>`).join('');
+            $('#contenidoPrincipal').html(`
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-box me-2"></i>Productos</span>${btn}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tablaProductos">
+                            <thead><tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Estado</th>${colAccion}</tr></thead>
+                            <tbody>${filas}</tbody>
+                        </table>
+                    </div>
+                </div>`);
+            destroyDT('#tablaProductos');
+            $('#tablaProductos').DataTable(dtLang());
+        });
             let botonNuevo = ES_ADMIN ? `<button class="btn btn-primary" onclick="mostrarFormularioProducto()"><i class="fas fa-plus"></i> Nuevo Producto</button>` : '';
             let html = `
                 <div class="d-flex justify-content-between mb-3">
@@ -408,10 +766,11 @@
         }).fail(function() { mostrarAlerta('Error al cargar los productos', 'danger'); });
     }
 
-    function mostrarFormularioProducto() {
+    function mostrarFormProducto() {
         $('#modalProductoTitulo').text('Nuevo Producto');
-        $('#formProducto')[0].reset();
         $('#productoCodigoHidden').val('');
+        $('#productoNombre, #productoPrecio, #productoStock').val('');
+        $('#productoEstado').val('1');
         new bootstrap.Modal(document.getElementById('modalProducto')).show();
     }
 
@@ -424,6 +783,11 @@
             $('#productoStock').val(p.stock);
             $('#productoEstado').val(p.estado);
             new bootstrap.Modal(document.getElementById('modalProducto')).show();
+        });
+    }
+
+    function guardarProducto() {
+        let data = {
         }).fail(function() { mostrarAlerta('Error al cargar datos del producto', 'danger'); });
     }
 
@@ -434,6 +798,12 @@
             stock: parseInt($('#productoStock').val()),
             estado: parseInt($('#productoEstado').val())
         };
+        let codigo = $('#productoCodigoHidden').val();
+        $.ajax({
+            url: codigo ? '/productos/' + codigo : '/productos',
+            method: codigo ? 'PUT' : 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
         let codigoExistente = $('#productoCodigoHidden').val();
         let url = codigoExistente ? '/productos/' + codigoExistente : '/productos';
         let method = codigoExistente ? 'PUT' : 'POST';
@@ -443,13 +813,20 @@
             success: function() {
                 bootstrap.Modal.getInstance(document.getElementById('modalProducto')).hide();
                 cargarProductos();
-                mostrarAlerta('Producto guardado exitosamente', 'success');
+                alerta('Producto guardado exitosamente', 'success');
             },
+            error: function(xhr) { alerta(xhr.responseText || 'Error al guardar el producto', 'danger'); }
             error: function(xhr) { mostrarAlerta(xhr.responseText || 'Error al guardar el producto', 'danger'); }
         });
     }
 
     function eliminarProducto(codigo) {
+        if (!confirm('¿Desactivar este producto?')) return;
+        $.ajax({
+            url: '/productos/' + codigo, method: 'DELETE',
+            success: function() { cargarProductos(); alerta('Producto desactivado', 'success'); },
+            error: function(xhr) { alerta(xhr.responseText || 'Error', 'danger'); }
+        });
         if (confirm('¿Estás seguro de eliminar este producto?')) {
             $.ajax({
                 url: '/productos/' + codigo, method: 'DELETE',
@@ -460,8 +837,64 @@
     }
 
     function cargarVentas() {
-        $('#tituloPagina').text('Ventas');
         $.get('/ventas', function(data) {
+            let filas = data.map(v => `<tr>
+                <td>${v.codigoVenta}</td>
+                <td>${v.fechaVenta}</td>
+                <td>${v.cliente ? v.cliente.nombreCliente + ' ' + v.cliente.apellidoCliente : 'N/A'}</td>
+                <td>${v.cliente ? v.cliente.DPICliente : 'N/A'}</td>
+                <td>${v.usuario ? v.usuario.nombreCompleto : 'N/A'}</td>
+                <td>Q${(v.total||0).toFixed(2)}</td>
+                <td>${estadoBadge(v.estado)}</td>
+                <td><button class="btn btn-info btn-sm" onclick="verFactura(${v.codigoVenta})"><i class="fas fa-file-invoice me-1"></i>Factura</button></td>
+            </tr>`).join('');
+            $('#contenidoPrincipal').html(`
+                <div class="card">
+                    <div class="card-header"><i class="fas fa-shopping-cart me-2"></i>Historial de Ventas</div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tablaVentas">
+                            <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>DPI</th><th>Vendedor</th><th>Total</th><th>Estado</th><th>Acción</th></tr></thead>
+                            <tbody>${filas}</tbody>
+                        </table>
+                    </div>
+                </div>`);
+            destroyDT('#tablaVentas');
+            $('#tablaVentas').DataTable(dtLang());
+        });
+    }
+
+    function cargarDetalleVentas() {
+        Promise.all([$.get('/detalleVentas'), $.get('/ventas'), $.get('/clientes')]).then(function(r) {
+            let [detalles, ventas, clientes] = r;
+            let ventasMap = {};
+            ventas.forEach(v => ventasMap[v.codigoVenta] = v);
+            let filas = detalles.map(d => {
+                let venta = d.ventas ? ventasMap[d.ventas.codigoVenta] : null;
+                let cliente = venta && venta.cliente ? venta.cliente : null;
+                return `<tr>
+                    <td>${d.codigoDetalleVenta}</td>
+                    <td>${d.ventas ? d.ventas.codigoVenta : 'N/A'}</td>
+                    <td>${venta ? venta.fechaVenta : 'N/A'}</td>
+                    <td>${cliente ? cliente.nombreCliente + ' ' + cliente.apellidoCliente : 'N/A'}</td>
+                    <td>${d.producto ? d.producto.nombreProducto : 'N/A'}</td>
+                    <td>${d.cantidad}</td>
+                    <td>Q${(d.precioUnitario||0).toFixed(2)}</td>
+                    <td>Q${(d.subtotal||0).toFixed(2)}</td>
+                    <td>${venta ? 'Q' + (venta.total||0).toFixed(2) : 'N/A'}</td>
+                </tr>`;
+            }).join('');
+            $('#contenidoPrincipal').html(`
+                <div class="card">
+                    <div class="card-header"><i class="fas fa-list-alt me-2"></i>Detalle de Ventas</div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tablaDetalles">
+                            <thead><tr><th>#Detalle</th><th>#Venta</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Precio Unit.</th><th>Subtotal</th><th>Total Venta</th></tr></thead>
+                            <tbody>${filas}</tbody>
+                        </table>
+                    </div>
+                </div>`);
+            destroyDT('#tablaDetalles');
+            $('#tablaDetalles').DataTable(dtLang());
             let html = `
                 <h3>Historial de Ventas</h3>
                 <table class="table table-striped" id="tablaVentas">
@@ -487,48 +920,76 @@
     function cargarNuevaVenta() {
         carrito = [];
         totalVenta = 0;
-        $('#tituloPagina').text('Nueva Venta');
-        Promise.all([$.get('/clientes'), $.get('/productos')]).then(function(respuestas) {
-            let clientes = respuestas[0], productos = respuestas[1];
-            let html = `
+        Promise.all([$.get('/clientes'), $.get('/productos')]).then(function(r) {
+            let [clientes, productos] = r;
+            let clientesActivos = clientes.filter(c => c.estado == 1);
+            let productosActivos = productos.filter(p => p.estado == 1 && p.stock > 0);
+            $('#contenidoPrincipal').html(`
                 <div class="row">
-                    <div class="col-md-5">
-                        <div class="card">
-                            <div class="card-header"><h5>Datos de la Venta</h5></div>
+                    <div class="col-md-5 mb-3">
+                        <div class="card mb-3">
+                            <div class="card-header"><i class="fas fa-info-circle me-2"></i>Datos de la Venta</div>
                             <div class="card-body">
+                                <div class="mb-3"><label>Cliente</label>
+                                    <select class="form-select" id="clienteSelect">
+                                        <option value="">Seleccione cliente...</option>
+                                        ${clientesActivos.map(c => `<option value="${c.DPICliente}">${c.nombreCliente} ${c.apellidoCliente} — ${c.DPICliente}</option>`).join('')}
+                                    </select>
+                                </div>
                                 <div class="mb-3"><label>Cliente</label><select class="form-select" id="clienteSelect"><option value="">Seleccione cliente...</option>${clientes.map(c => `<option value="${c.dpiCliente}">${c.nombreCliente} ${c.apellidoCliente} - ${c.dpiCliente}</option>`).join('')}</select></div>
                                 <div class="mb-3"><label>Fecha</label><input type="date" class="form-control" id="fechaVenta" value="${new Date().toISOString().split('T')[0]}"></div>
                             </div>
                         </div>
-                        <div class="card mt-3">
-                            <div class="card-header"><h5>Agregar Producto</h5></div>
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-plus-circle me-2"></i>Agregar Producto</div>
                             <div class="card-body">
+                                <div class="mb-3"><label>Producto</label>
+                                    <select class="form-select" id="productoSelect">
+                                        <option value="">Seleccione producto...</option>
+                                        ${productosActivos.map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-nombre="${p.nombreProducto}" data-stock="${p.stock}">${p.nombreProducto} — Q${p.precio} (Stock: ${p.stock})</option>`).join('')}
+                                    </select>
+                                </div>
                                 <div class="mb-3"><label>Producto</label><select class="form-select" id="productoSelect"><option value="">Seleccione producto...</option>${productos.filter(p => p.estado == 1 && p.stock > 0).map(p => `<option value="${p.codigoProducto}" data-precio="${p.precio}" data-nombre="${p.nombreProducto}" data-stock="${p.stock}">${p.nombreProducto} - Q${p.precio} (Stock: ${p.stock})</option>`).join('')}</select></div>
                                 <div class="mb-3"><label>Cantidad</label><input type="number" class="form-control" id="cantidadProducto" value="1" min="1"></div>
-                                <button class="btn btn-primary w-100" onclick="agregarAlCarrito()"><i class="fas fa-cart-plus"></i> Agregar</button>
+                                <button class="btn btn-primary w-100" onclick="agregarAlCarrito()"><i class="fas fa-cart-plus me-1"></i>Agregar al Carrito</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 mb-3">
                         <div class="card">
-                            <div class="card-header"><h5>Carrito de Compras</h5></div>
+                            <div class="card-header"><i class="fas fa-shopping-cart me-2"></i>Carrito</div>
                             <div class="card-body">
                                 <table class="table table-sm">
-                                    <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr></thead>
-                                    <tbody id="carritoBody"><tr><td colspan="5" class="text-center">No hay productos</td></tr></tbody>
-                                    <tfoot><tr class="table-secondary"><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td colspan="2"><strong id="totalCarrito">Q0.00</strong></td></tr></tfoot>
+                                    <thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th><th></th></tr></thead>
+                                    <tbody id="carritoBody"><tr><td colspan="5" class="text-center" style="color:#64748b;">Sin productos</td></tr></tbody>
+                                    <tfoot><tr><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td colspan="2"><strong id="totalCarrito" style="color:#ffc107;">Q0.00</strong></td></tr></tfoot>
                                 </table>
-                                <button class="btn btn-success w-100" onclick="finalizarVenta()"><i class="fas fa-check-circle"></i> Finalizar Venta</button>
+                                <button class="btn btn-success w-100 mt-2" onclick="finalizarVenta()"><i class="fas fa-check-circle me-1"></i>Finalizar Venta</button>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-            $('#contenidoPrincipal').html(html);
+                </div>`);
         });
     }
 
     function agregarAlCarrito() {
+        let sel = document.getElementById('productoSelect');
+        let opt = sel.options[sel.selectedIndex];
+        let id = sel.value;
+        if (!id) { alerta('Seleccione un producto', 'warning'); return; }
+        let nombre  = opt.getAttribute('data-nombre');
+        let precio  = parseFloat(opt.getAttribute('data-precio'));
+        let stock   = parseInt(opt.getAttribute('data-stock'));
+        let cant    = parseInt(document.getElementById('cantidadProducto').value);
+        if (cant <= 0) { alerta('La cantidad debe ser mayor a 0', 'warning'); return; }
+        let item = carrito.find(p => p.id == id);
+        let cantActual = item ? item.cantidad : 0;
+        if (cantActual + cant > stock) { alerta('Stock insuficiente. Disponible: ' + stock, 'danger'); return; }
+        if (item) {
+            item.cantidad += cant;
+            item.subtotal = item.cantidad * item.precio;
+        } else {
+            carrito.push({ id, nombre, precio, cantidad: cant, subtotal: cant * precio, stockMax: stock });
         let select = document.getElementById('productoSelect');
         let productoId = select.value;
         let opcion = select.options[select.selectedIndex];
@@ -548,29 +1009,34 @@
             carrito.push({ id: productoId, nombre: productoNombre, precio: productoPrecio, cantidad: cantidad, subtotal: cantidad * productoPrecio, stockMaximo: stockDisponible });
         }
         actualizarCarrito();
-        mostrarAlerta('Producto agregado', 'success');
+        alerta('Producto agregado al carrito', 'success');
     }
 
     function actualizarCarrito() {
+        totalVenta = carrito.reduce((s, p) => s + p.subtotal, 0);
         let tbody = document.getElementById('carritoBody');
-        totalVenta = carrito.reduce((sum, p) => sum + p.subtotal, 0);
-        if (carrito.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos</td></tr>';
+        if (!carrito.length) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="color:#64748b;">Sin productos</td></tr>';
             document.getElementById('totalCarrito').innerHTML = 'Q0.00';
             return;
         }
-        tbody.innerHTML = carrito.map((p, i) => `
-            <tr>
-                <td>${p.nombre}</td>
-                <td><input type="number" class="form-control form-control-sm" value="${p.cantidad}" style="width:80px" min="1" max="${p.stockMaximo}" onchange="actualizarCantidad(${i}, this.value)"></td>
-                <td>Q${p.precio.toFixed(2)}</td>
-                <td>Q${p.subtotal.toFixed(2)}</td>
-                <td><button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${i})"><i class="fas fa-trash"></i></button></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = carrito.map((p, i) => `<tr>
+            <td>${p.nombre}</td>
+            <td><input type="number" class="form-control form-control-sm" style="width:75px;" value="${p.cantidad}" min="1" max="${p.stockMax}" onchange="actualizarCantidad(${i},this.value)"></td>
+            <td>Q${p.precio.toFixed(2)}</td>
+            <td>Q${p.subtotal.toFixed(2)}</td>
+            <td><button class="btn btn-danger btn-sm" onclick="quitarDelCarrito(${i})"><i class="fas fa-times"></i></button></td>
+        </tr>`).join('');
         document.getElementById('totalCarrito').innerHTML = `Q${totalVenta.toFixed(2)}`;
     }
 
+    function actualizarCantidad(i, val) {
+        let n = parseInt(val);
+        let p = carrito[i];
+        if (n > p.stockMax) { alerta('Máximo disponible: ' + p.stockMax, 'warning'); n = p.stockMax; }
+        if (n <= 0) { quitarDelCarrito(i); return; }
+        p.cantidad = n;
+        p.subtotal = n * p.precio;
     function actualizarCantidad(index, nuevaCantidad) {
         let nuevaCant = parseInt(nuevaCantidad);
         let producto = carrito[index];
@@ -581,14 +1047,19 @@
         actualizarCarrito();
     }
 
-    function eliminarDelCarrito(index) {
-        carrito.splice(index, 1);
+    function quitarDelCarrito(i) {
+        carrito.splice(i, 1);
         actualizarCarrito();
-        mostrarAlerta('Producto eliminado del carrito', 'info');
     }
 
     function finalizarVenta() {
         let clienteId = document.getElementById('clienteSelect').value;
+        let fecha     = document.getElementById('fechaVenta').value;
+        let usuarioId = parseInt(document.getElementById('usuarioActualId').value);
+        if (!clienteId) { alerta('Seleccione un cliente', 'warning'); return; }
+        if (!carrito.length) { alerta('Agregue al menos un producto', 'warning'); return; }
+        if (!usuarioId || usuarioId === 0) { alerta('No se pudo identificar el usuario. Vuelva a iniciar sesión.', 'danger'); return; }
+
         let fecha = document.getElementById('fechaVenta').value;
         let usuarioId = $('#usuarioActualId').val();
         if (!clienteId) { mostrarAlerta('Seleccione un cliente', 'warning'); return; }
@@ -597,13 +1068,29 @@
             fechaVenta: fecha,
             total: totalVenta,
             estado: 1,
-            cliente: { dpiCliente: clienteId },
-            usuario: { codigoUsuario: parseInt(usuarioId) }
+            cliente: { DPICliente: clienteId },
+            usuario: { codigoUsuario: usuarioId }
         };
         $.ajax({
             url: '/ventas', method: 'POST', contentType: 'application/json',
             data: JSON.stringify(ventaData),
             success: function(venta) {
+                let pendientes = carrito.length;
+                let errores = 0;
+                carrito.forEach(function(p) {
+                    $.ajax({
+                        url: '/detalleVentas', method: 'POST', contentType: 'application/json',
+                        data: JSON.stringify({
+                            cantidad: p.cantidad,
+                            precioUnitario: p.precio,
+                            subtotal: p.subtotal,
+                            producto: { codigoProducto: parseInt(p.id) },
+                            ventas: { codigoVenta: venta.codigoVenta }
+                        }),
+                        success: function() {
+                            pendientes--;
+                            if (pendientes === 0 && errores === 0) {
+                                alerta('Venta registrada exitosamente', 'success');
                 let completados = 0;
                 carrito.forEach(function(producto) {
                     $.ajax({
@@ -620,9 +1107,20 @@
                             if (completados === carrito.length) {
                                 mostrarAlerta('Venta registrada exitosamente', 'success');
                                 verFactura(venta.codigoVenta);
+                                carrito = [];
+                                totalVenta = 0;
                                 cargarPagina('ventas');
                             }
                         },
+                        error: function(xhr) {
+                            errores++;
+                            pendientes--;
+                            alerta('Error en detalle de venta: ' + (xhr.responseText || 'Error desconocido'), 'danger');
+                        }
+                    });
+                });
+            },
+            error: function(xhr) { alerta('Error al registrar la venta: ' + (xhr.responseText || 'Error desconocido'), 'danger'); }
                         error: function(xhr) { mostrarAlerta('Error en detalle: ' + (xhr.responseText || 'Error desconocido'), 'danger'); }
                     });
                 });
@@ -632,42 +1130,44 @@
     }
 
     function cargarUsuarios() {
-        $('#tituloPagina').text('Usuarios');
         $.get('/usuarios', function(data) {
-            let botonNuevo = ES_ADMIN ? `<button class="btn btn-primary" onclick="mostrarFormularioUsuario()"><i class="fas fa-plus"></i> Nuevo Usuario</button>` : '';
-            let html = `
-                <div class="d-flex justify-content-between mb-3">
-                    <h3>Lista de Usuarios</h3>
-                    ${botonNuevo}
-                </div>
-                <table class="table table-striped" id="tablaUsuarios">
-                    <thead class="table-dark"><tr><th>Código</th><th>Username</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th>${ES_ADMIN ? '<th>Acciones</th>' : ''}</tr></thead>
-                    <tbody>${data.map(u => `
-                        <tr>
-                            <td>${u.codigoUsuario}</td>
-                            <td>${u.username}</td>
-                            <td>${u.nombreCompleto}</td>
-                            <td>${u.email}</td>
-                            <td><span class="badge bg-info">${u.rol}</span></td>
-                            <td>${u.estado == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>'}</td>
-                            ${ES_ADMIN ? `<td>
-                                <button class="btn btn-sm btn-warning" onclick="editarUsuario(${u.codigoUsuario})"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.codigoUsuario})"><i class="fas fa-trash"></i></button>
-                            </td>` : ''}
-                        </tr>`).join('')}
-                    </tbody>
-                </table>
-            `;
-            $('#contenidoPrincipal').html(html);
-            if ($.fn.DataTable.isDataTable('#tablaUsuarios')) $('#tablaUsuarios').DataTable().destroy();
-            $('#tablaUsuarios').DataTable({ language: { url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json' } });
+            let btn = ES_ADMIN ? `<button class="btn btn-primary btn-sm" onclick="mostrarFormUsuario()"><i class="fas fa-plus me-1"></i>Nuevo Usuario</button>` : '';
+            let colAccion = ES_ADMIN ? '<th>Acciones</th>' : '';
+            let filas = data.map(u => `<tr>
+                <td>${u.codigoUsuario}</td>
+                <td>${u.username}</td>
+                <td>${u.nombreCompleto}</td>
+                <td>${u.email}</td>
+                <td><span class="badge-rol">${u.rol}</span></td>
+                <td>${estadoBadge(u.estado)}</td>
+                ${ES_ADMIN ? `<td>
+                    <button class="btn btn-warning btn-sm me-1" onclick="editarUsuario(${u.codigoUsuario})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${u.codigoUsuario})"><i class="fas fa-trash"></i></button>
+                </td>` : ''}
+            </tr>`).join('');
+            $('#contenidoPrincipal').html(`
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-users-cog me-2"></i>Usuarios</span>${btn}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tablaUsuarios">
+                            <thead><tr><th>Código</th><th>Username</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th>${colAccion}</tr></thead>
+                            <tbody>${filas}</tbody>
+                        </table>
+                    </div>
+                </div>`);
+            destroyDT('#tablaUsuarios');
+            $('#tablaUsuarios').DataTable(dtLang());
         });
     }
 
-    function mostrarFormularioUsuario() {
+    function mostrarFormUsuario() {
         $('#modalUsuarioTitulo').text('Nuevo Usuario');
-        $('#formUsuario')[0].reset();
         $('#usuarioCodigoHidden').val('');
+        $('#usuarioNombreCompleto, #usuarioUsername, #usuarioEmail, #usuarioPassword').val('');
+        $('#usuarioRol').val('VENDEDOR');
+        $('#usuarioEstado').val('1');
         $('#usuarioPassword').prop('required', true);
         new bootstrap.Modal(document.getElementById('modalUsuario')).show();
     }
@@ -687,88 +1187,77 @@
     }
 
     function guardarUsuario() {
-        let usuarioData = {
+        let codigo   = $('#usuarioCodigoHidden').val();
+        let password = $('#usuarioPassword').val();
+        if (!codigo && !password.trim()) { alerta('La contraseña es obligatoria para nuevos usuarios', 'warning'); return; }
+        let data = {
             nombreCompleto: $('#usuarioNombreCompleto').val(),
             username: $('#usuarioUsername').val(),
             email: $('#usuarioEmail').val(),
             rol: $('#usuarioRol').val(),
             estado: parseInt($('#usuarioEstado').val())
         };
-        let codigoExistente = $('#usuarioCodigoHidden').val();
-        let password = $('#usuarioPassword').val();
-        if (password && password.trim() !== '') {
-            usuarioData.password = password;
-        } else if (!codigoExistente) {
-            mostrarAlerta('La contraseña es obligatoria para nuevos usuarios', 'warning');
-            return;
-        }
-        let url = codigoExistente ? '/usuarios/' + codigoExistente : '/usuarios';
-        let method = codigoExistente ? 'PUT' : 'POST';
+        if (password.trim()) data.password = password;
         $.ajax({
-            url: url, method: method, contentType: 'application/json',
-            data: JSON.stringify(usuarioData),
+            url: codigo ? '/usuarios/' + codigo : '/usuarios',
+            method: codigo ? 'PUT' : 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
             success: function() {
                 bootstrap.Modal.getInstance(document.getElementById('modalUsuario')).hide();
                 cargarUsuarios();
-                mostrarAlerta('Usuario guardado exitosamente', 'success');
+                alerta('Usuario guardado exitosamente', 'success');
             },
-            error: function(xhr) {
-                let mensaje = xhr.status === 400 ? 'Verifique que el username y email no estén duplicados' : (xhr.responseText || 'Error al guardar');
-                mostrarAlerta(mensaje, 'danger');
-            }
+            error: function(xhr) { alerta(xhr.responseText || 'Error al guardar el usuario', 'danger'); }
         });
     }
 
     function eliminarUsuario(codigo) {
-        if (confirm('¿Estás seguro de eliminar este usuario?')) {
-            $.ajax({
-                url: '/usuarios/' + codigo, method: 'DELETE',
-                success: function() { cargarUsuarios(); mostrarAlerta('Usuario eliminado', 'success'); },
-                error: function(xhr) { mostrarAlerta(xhr.responseText || 'Error al eliminar', 'danger'); }
-            });
-        }
+        if (!confirm('¿Desactivar este usuario?')) return;
+        $.ajax({
+            url: '/usuarios/' + codigo, method: 'DELETE',
+            success: function() { cargarUsuarios(); alerta('Usuario desactivado', 'success'); },
+            error: function(xhr) { alerta(xhr.responseText || 'Error', 'danger'); }
+        });
     }
 
     function verFactura(codigoVenta) {
-        Promise.all([$.get('/ventas/' + codigoVenta), $.get('/detalleVentas')]).then(function(respuestas) {
-            let venta = respuestas[0];
-            let todosDetalles = respuestas[1];
-            let detallesVenta = todosDetalles.filter(d => d.ventas && d.ventas.codigoVenta == codigoVenta);
-            let facturaHtml = `
-                <div class="factura">
+        Promise.all([$.get('/ventas/' + codigoVenta), $.get('/detalleVentas')]).then(function(r) {
+            let venta   = r[0];
+            let detalles = r[1].filter(d => d.ventas && d.ventas.codigoVenta == codigoVenta);
+            $('#facturaBody').html(`
+                <div class="factura-box">
                     <div class="text-center mb-4">
-                        <h2>KINALAPP</h2>
-                        <p>Sistema de Ventas</p>
-                        <p>NIT: 123456-7</p>
-                        <hr>
+                        <h2><i class="fas fa-store me-2"></i>KINALAPP</h2>
+                        <p style="color:#94a3b8;">Sistema de Ventas — NIT: 123456-7</p>
+                        <hr style="border-color:rgba(255,193,7,0.3);">
                         <h4>FACTURA No. ${venta.codigoVenta}</h4>
                     </div>
                     <div class="row mb-3">
                         <div class="col-6">
-                            <strong>Fecha:</strong> ${new Date(venta.fechaVenta).toLocaleDateString()}<br>
-                            <strong>Cliente:</strong> ${venta.cliente ? venta.cliente.nombreCliente + ' ' + venta.cliente.apellidoCliente : 'N/A'}<br>
-                            <strong>DPI:</strong> ${venta.cliente ? venta.cliente.dpiCliente : 'N/A'}
+                            <p><strong style="color:#ffc107;">Fecha:</strong> ${venta.fechaVenta}</p>
+                            <p><strong style="color:#ffc107;">Cliente:</strong> ${venta.cliente ? venta.cliente.nombreCliente + ' ' + venta.cliente.apellidoCliente : 'N/A'}</p>
+                            <p><strong style="color:#ffc107;">DPI:</strong> ${venta.cliente ? venta.cliente.DPICliente : 'N/A'}</p>
                         </div>
                         <div class="col-6">
-                            <strong>Vendedor:</strong> ${venta.usuario ? venta.usuario.nombreCompleto : 'N/A'}<br>
-                            <strong>Usuario:</strong> ${venta.usuario ? venta.usuario.username : 'N/A'}
+                            <p><strong style="color:#ffc107;">Vendedor:</strong> ${venta.usuario ? venta.usuario.nombreCompleto : 'N/A'}</p>
+                            <p><strong style="color:#ffc107;">Usuario:</strong> ${venta.usuario ? venta.usuario.username : 'N/A'}</p>
                         </div>
                     </div>
-                    <hr>
                     <table class="table table-bordered">
-                        <thead><tr><th>Cantidad</th><th>Producto</th><th>Precio</th><th>Subtotal</th></tr></thead>
-                        <tbody>${detallesVenta.map(d => `<tr><td>${d.cantidad}</td><td>${d.productos ? d.productos.nombreProducto : 'Producto'}</td><td>Q${(d.precioUnitario || 0).toFixed(2)}</td><td>Q${(d.subtotal || 0).toFixed(2)}</td></tr>`).join('')}</tbody>
-                        <tfoot><tr class="table-secondary"><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td><strong>Q${(venta.total || 0).toFixed(2)}</strong></td></tr></tfoot>
+                        <thead><tr><th>Cantidad</th><th>Producto</th><th>Precio Unit.</th><th>Subtotal</th></tr></thead>
+                        <tbody>${detalles.map(d => `<tr>
+                            <td>${d.cantidad}</td>
+                            <td>${d.producto ? d.producto.nombreProducto : 'Producto'}</td>
+                            <td>Q${(d.precioUnitario||0).toFixed(2)}</td>
+                            <td>Q${(d.subtotal||0).toFixed(2)}</td>
+                        </tr>`).join('')}</tbody>
+                        <tfoot><tr><td colspan="3" class="text-end"><strong>TOTAL:</strong></td><td><strong style="color:#ffc107;">Q${(venta.total||0).toFixed(2)}</strong></td></tr></tfoot>
                     </table>
-                    <hr>
-                    <div class="text-center mt-4">
-                        <p>¡Gracias por su compra!</p>
-                    </div>
-                </div>
-            `;
-            $('#facturaBody').html(facturaHtml);
+                    <div class="text-center mt-3" style="color:#94a3b8;">¡Gracias por su compra!</div>
+                </div>`);
             new bootstrap.Modal(document.getElementById('modalFactura')).show();
-        }).catch(function() { mostrarAlerta('Error al cargar la factura', 'danger'); });
+        }).catch(function() { alerta('Error al cargar la factura', 'danger'); });
     }
 </script>
 </body>

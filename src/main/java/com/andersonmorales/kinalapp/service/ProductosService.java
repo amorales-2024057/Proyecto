@@ -27,16 +27,12 @@ public class ProductosService implements IProductosService {
     @Override
     public Productos guardar(Productos productos) {
         validarProducto(productos);
-
-        // Si el código es null, JPA generará uno nuevo automáticamente
         if (productos.getCodigoProducto() == null || productos.getCodigoProducto() == 0) {
             productos.setCodigoProducto(null);
         }
-
         if (productos.getEstado() == 0) {
             productos.setEstado(1);
         }
-
         return productosRepository.save(productos);
     }
 
@@ -67,10 +63,10 @@ public class ProductosService implements IProductosService {
 
     @Override
     public void eliminar(Long codigo) {
-        if (!productosRepository.existsById(codigo)) {
-            throw new RuntimeException("Producto no encontrado con código " + codigo);
-        }
-        productosRepository.deleteById(codigo);
+        Productos producto = productosRepository.findById(codigo)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con código " + codigo));
+        producto.setEstado(0);
+        productosRepository.save(producto);
     }
 
     @Override
