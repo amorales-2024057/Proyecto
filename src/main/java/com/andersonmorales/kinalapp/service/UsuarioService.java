@@ -105,10 +105,10 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public void eliminar(long codigo) {
-        Usuario usuario = usuarioRepository.findById(codigo)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con código " + codigo));
-        usuario.setEstado(0);
-        usuarioRepository.save(usuario);
+        if (!usuarioRepository.existsById(codigo)) {
+            throw new RuntimeException("Usuario no encontrado con código " + codigo);
+        }
+        usuarioRepository.deleteById(codigo);
     }
 
     @Override
