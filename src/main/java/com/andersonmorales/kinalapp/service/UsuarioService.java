@@ -4,6 +4,7 @@ import com.andersonmorales.kinalapp.entity.Usuario;
 import com.andersonmorales.kinalapp.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +60,6 @@ public class UsuarioService implements IUsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            // Comparación directa (sin encriptar por simplicidad)
             if (usuario.getPassword().equals(password) && usuario.getEstado() == 1) {
                 usuario.setUltimoLogin(LocalDateTime.now());
                 usuarioRepository.save(usuario);
@@ -71,14 +71,12 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public boolean registrar(Usuario usuario) {
-        // Verificar si ya existe
         if (usuarioRepository.existsByUsername(usuario.getUsername())) {
             return false;
         }
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             return false;
         }
-        // Asignar rol por defecto
         usuario.setRol("VENDEDOR");
         usuario.setEstado(1);
         usuario.setFechaRegistro(LocalDateTime.now());
@@ -107,10 +105,10 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public void eliminar(long codigo) {
-        if (!usuarioRepository.existsById(codigo)) {
-            throw new RuntimeException("Usuario no encontrado con código " + codigo);
-        }
-        usuarioRepository.deleteById(codigo);
+        Usuario usuario = usuarioRepository.findById(codigo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con código " + codigo));
+        usuario.setEstado(0);
+        usuarioRepository.save(usuario);
     }
 
     @Override
