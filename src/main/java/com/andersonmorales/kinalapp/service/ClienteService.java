@@ -60,10 +60,10 @@ public class ClienteService implements IClienteService {
 
     @Override
     public void eliminar(String dpi) {
-        Cliente cliente = clienteRepository.findById(dpi)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con DPI " + dpi));
-        cliente.setEstado(0);
-        clienteRepository.save(cliente);
+        if (!clienteRepository.existsById(dpi)) {
+            throw new RuntimeException("Cliente no encontrado con DPI " + dpi);
+        }
+        clienteRepository.deleteById(dpi);
     }
 
     @Override

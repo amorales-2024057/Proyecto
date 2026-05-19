@@ -692,11 +692,12 @@
     }
 
     function eliminarCliente(dpi) {
-        if (!confirm('¿Desactivar este cliente?')) return;
+        if (!confirm('¿Eliminar PERMANENTEMENTE este cliente? No se podrá recuperar.')) return;
         $.ajax({
-            url: '/clientes/' + dpi, method: 'DELETE',
-            success: function() { cargarClientes(); alerta('Cliente desactivado', 'success'); },
-            error: function(xhr) { alerta(xhr.responseText || 'Error', 'danger'); }
+            url: '/clientes/' + dpi,
+            method: 'DELETE',
+            success: function() { cargarClientes(); alerta('Cliente eliminado permanentemente', 'success'); },
+            error: function(xhr) { alerta(xhr.responseText || 'Error al eliminar el cliente', 'danger'); }
         });
         if (confirm('¿Estás seguro de eliminar este cliente?')) {
             $.ajax({
@@ -821,11 +822,17 @@
     }
 
     function eliminarProducto(codigo) {
-        if (!confirm('¿Desactivar este producto?')) return;
+        if (!confirm('¿Eliminar permanentemente este producto? No se podrá recuperar.')) return;
         $.ajax({
-            url: '/productos/' + codigo, method: 'DELETE',
-            success: function() { cargarProductos(); alerta('Producto desactivado', 'success'); },
-            error: function(xhr) { alerta(xhr.responseText || 'Error', 'danger'); }
+            url: '/productos/eliminar/' + codigo,
+            method: 'DELETE',
+            success: function() {
+                cargarProductos();
+                alerta('Producto eliminado permanentemente', 'success');
+            },
+            error: function(xhr) {
+                alerta(xhr.responseText || 'Error al eliminar el producto', 'danger');
+            }
         });
         if (confirm('¿Estás seguro de eliminar este producto?')) {
             $.ajax({

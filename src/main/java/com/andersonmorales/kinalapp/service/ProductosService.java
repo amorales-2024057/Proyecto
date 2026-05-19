@@ -63,10 +63,10 @@ public class ProductosService implements IProductosService {
 
     @Override
     public void eliminar(Long codigo) {
-        Productos producto = productosRepository.findById(codigo)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con código " + codigo));
-        producto.setEstado(0);
-        productosRepository.save(producto);
+        if (!productosRepository.existsById(codigo)) {
+            throw new RuntimeException("Producto no encontrado con código " + codigo);
+        }
+        productosRepository.deleteById(codigo);
     }
 
     @Override
