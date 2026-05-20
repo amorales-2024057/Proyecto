@@ -1,7 +1,11 @@
 package com.andersonmorales.kinalapp.service;
 
 import com.andersonmorales.kinalapp.entity.Cliente;
+import com.andersonmorales.kinalapp.entity.DetalleVenta;
+import com.andersonmorales.kinalapp.entity.Ventas;
 import com.andersonmorales.kinalapp.repository.ClienteRepository;
+import com.andersonmorales.kinalapp.repository.DetalleVentasRepository;
+import com.andersonmorales.kinalapp.repository.VentasRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +17,15 @@ import java.util.Optional;
 public class ClienteService implements IClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final VentasRepository ventasRepository;
+    private final DetalleVentasRepository detalleVentasRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository,
+                          VentasRepository ventasRepository,
+                          DetalleVentasRepository detalleVentasRepository) {
         this.clienteRepository = clienteRepository;
+        this.ventasRepository = ventasRepository;
+        this.detalleVentasRepository = detalleVentasRepository;
     }
 
     @Override
@@ -44,7 +54,7 @@ public class ClienteService implements IClienteService {
     public Optional<Cliente> buscarPorEstado(int estado) {
         return clienteRepository.findAll()
                 .stream()
-                .filter(cliente -> cliente.getEstado() == estado)
+                .filter(c -> c.getEstado() == estado)
                 .findAny();
     }
 
@@ -62,6 +72,18 @@ public class ClienteService implements IClienteService {
     public void eliminar(String dpi) {
         if (!clienteRepository.existsById(dpi)) {
             throw new RuntimeException("Cliente no encontrado con DPI " + dpi);
+        }
+        List<Ventas> ventas = ventasRepository.findByClienteDPICliente(dpi);
+        for (Ventas venta : ventas) {
+            List<DetalleVenta> detalles = detalleVentasRepository.findByVentasCodigoVenta(venta.getCodigoVenta());
+            if (!detalles.isEmpty()) {
+                detalleVentasRepository.deleteAll(detalles);
+                detalleVentasRepository.flush();
+            }
+        }
+        if (!ventas.isEmpty()) {
+            ventasRepository.deleteAll(ventas);
+            ventasRepository.flush();
         }
         clienteRepository.deleteById(dpi);
     }

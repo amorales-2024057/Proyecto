@@ -1,7 +1,11 @@
 package com.andersonmorales.kinalapp.service;
 
 import com.andersonmorales.kinalapp.entity.Usuario;
+import com.andersonmorales.kinalapp.entity.Ventas;
+import com.andersonmorales.kinalapp.repository.DetalleVentasRepository;
 import com.andersonmorales.kinalapp.repository.UsuarioRepository;
+import com.andersonmorales.kinalapp.repository.VentasRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +18,18 @@ import java.util.Optional;
 public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final VentasRepository ventasRepository;
+    private final DetalleVentasRepository detalleVentasRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                          VentasRepository ventasRepository,
+                          DetalleVentasRepository detalleVentasRepository,
+                          PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.ventasRepository = ventasRepository;
+        this.detalleVentasRepository = detalleVentasRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,7 +41,10 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public Usuario guardar(Usuario usuario) {
         validarUsuario(usuario);
-        if (usuario.getEstado() == 0) {
+        if (usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()) {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
+        if (usuario.getEstado() == null || usuario.getEstado() == 0) {
             usuario.setEstado(1);
         }
         if (usuario.getFechaRegistro() == null) {
@@ -57,9 +73,9 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario login(String username, String password) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
+        Optional<Usuario> opt = usuarioRepository.findByUsername(username);
+        if (opt.isPresent()) {
+            Usuario usuario = opt.get();
             if (usuario.getPassword().equals(password) && usuario.getEstado() == 1) {
                 usuario.setUltimoLogin(LocalDateTime.now());
                 usuarioRepository.save(usuario);
@@ -77,9 +93,10 @@ public class UsuarioService implements IUsuarioService {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             return false;
         }
-        usuario.setRol("VENDEDOR");
+        usuario.setRol("USER");
         usuario.setEstado(1);
         usuario.setFechaRegistro(LocalDateTime.now());
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioRepository.save(usuario);
         return true;
     }
@@ -89,7 +106,7 @@ public class UsuarioService implements IUsuarioService {
     public Optional<Usuario> buscarPorEstado(int estado) {
         return usuarioRepository.findAll()
                 .stream()
-                .filter(usuario -> usuario.getEstado() == estado)
+                .filter(u -> u.getEstado() == estado)
                 .findAny();
     }
 
@@ -97,6 +114,12 @@ public class UsuarioService implements IUsuarioService {
     public Usuario actualizar(long codigo, Usuario usuario) {
         if (!usuarioRepository.existsById(codigo)) {
             throw new RuntimeException("Usuario no encontrado con código " + codigo);
+        }
+        Usuario existente = usuarioRepository.findById(codigo).get();
+        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
+            usuario.setPassword(existente.getPassword());
+        } else {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         }
         usuario.setCodigoUsuario(codigo);
         validarUsuario(usuario);
@@ -108,6 +131,13 @@ public class UsuarioService implements IUsuarioService {
         if (!usuarioRepository.existsById(codigo)) {
             throw new RuntimeException("Usuario no encontrado con código " + codigo);
         }
+        List<Ventas> ventas = ventasRepository.findByUsuarioCodigoUsuario(codigo);
+        for (Ventas venta : ventas) {
+            detalleVentasRepository.deleteAll(
+                    detalleVentasRepository.findByVentasCodigoVenta(venta.getCodigoVenta())
+            );
+        }
+        ventasRepository.deleteAll(ventas);
         usuarioRepository.deleteById(codigo);
     }
 
