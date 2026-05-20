@@ -1,6 +1,7 @@
 package com.andersonmorales.kinalapp.service;
 
 import com.andersonmorales.kinalapp.entity.Productos;
+import com.andersonmorales.kinalapp.repository.DetalleVentasRepository;
 import com.andersonmorales.kinalapp.repository.ProductosRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,12 @@ import java.util.Optional;
 public class ProductosService implements IProductosService {
 
     private final ProductosRepository productosRepository;
+    private final DetalleVentasRepository detalleVentasRepository;
 
-    public ProductosService(ProductosRepository productoRepository) {
-        this.productosRepository = productoRepository;
+    public ProductosService(ProductosRepository productosRepository,
+                            DetalleVentasRepository detalleVentasRepository) {
+        this.productosRepository = productosRepository;
+        this.detalleVentasRepository = detalleVentasRepository;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class ProductosService implements IProductosService {
     public Optional<Productos> buscarPorEstado(int estado) {
         return productosRepository.findAll()
                 .stream()
-                .filter(producto -> producto.getEstado() == estado)
+                .filter(p -> p.getEstado() == estado)
                 .findAny();
     }
 
@@ -66,6 +70,9 @@ public class ProductosService implements IProductosService {
         if (!productosRepository.existsById(codigo)) {
             throw new RuntimeException("Producto no encontrado con código " + codigo);
         }
+        detalleVentasRepository.deleteAll(
+                detalleVentasRepository.findByProductosCodigoProducto(codigo)
+        );
         productosRepository.deleteById(codigo);
     }
 
